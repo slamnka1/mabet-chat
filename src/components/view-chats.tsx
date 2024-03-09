@@ -11,7 +11,7 @@ const ViewChats = (props: Props) => {
         <h2 className="mt-8 pb-4 text-xl font-bold">جميع المحادثات</h2>
       </div>
 
-      <div className=" space-y-2  divide-y divide-solid">
+      <div>
         {new Array(10).fill("").map((e, i) => (
           <ChatItem
             key={`chat_${i}`}
