@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 import { getTimeDifference } from "@/utils/getTimeDifference"
 import { motion } from "framer-motion"
 import { Trash2, User } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import useClickOutside from "@/hooks/use-click-outside"
 
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
@@ -24,9 +25,21 @@ const ChatItem = ({ imageSrc, name, lastMessage, messageTime }: Props) => {
       setChatOptions(true)
     }
   }
+
+  const ref = useRef<React.ElementRef<"div">>(null)
+  useClickOutside(ref, () => {
+    setChatOptions(false)
+  })
+
+  const handleDeleteChat = () => {
+    // TODO handle delete chat
+    console.log("chat should be deleted")
+    setChatOptions(false)
+  }
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <button
+        onClick={handleDeleteChat}
         type="button"
         className=" absolute left-0 top-0 flex aspect-square h-full flex-col items-center justify-center gap-2 bg-[#263238] text-white">
         <span className="block text-[10px] font-bold">مسح المحادثة</span>
