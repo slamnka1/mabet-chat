@@ -1,19 +1,26 @@
 "use client"
+
 import React from "react"
+import { useAppStore } from "@/stores/app-store-provider"
+
 import { Input } from "./ui/input"
 
 type Props = {}
 
 const SearchChats = (props: Props) => {
+  const setDrawer = useAppStore((state) => state.setDrawer)
+  const handleFilter = () => {
+    setDrawer("filters")
+  }
   return (
-    <div className="flex  items-center gap-4 !mt-4">
+    <div className="!mt-4  flex items-center gap-4">
       <div className="relative w-full">
         <Input
           placeholder="ابحث عن محادثة ......"
           className=" border-[#D6D6D6] bg-white pr-11 placeholder:font-bold"
         />
         <svg
-          className="absolute top-2 right-2"
+          className="absolute right-2 top-2"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -26,9 +33,10 @@ const SearchChats = (props: Props) => {
         </svg>
       </div>
       <button
+        onClick={handleFilter}
         type="button"
         title="more options"
-        className="bg-white aspect-square w-10 h-10 shrink-0 rounded-lg  flex items-center justify-center ">
+        className="flex aspect-square h-10 w-10 shrink-0 items-center  justify-center rounded-lg bg-white ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

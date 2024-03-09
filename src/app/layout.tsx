@@ -5,6 +5,8 @@ import "./globals.css"
 
 import { AppStoreProvider } from "@/stores/app-store-provider"
 
+import { MyDrawer } from "@/components/my-drawer"
+
 const cairo = Cairo({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -23,7 +25,10 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
-        <AppStoreProvider>{children}</AppStoreProvider>
+        <AppStoreProvider>
+          {children}
+          <MyDrawer />
+        </AppStoreProvider>
       </body>
     </html>
   )
