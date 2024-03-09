@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
 import { Cairo } from "next/font/google"
+
 import "./globals.css"
+
+import { AppStoreProvider } from "@/stores/app-store-provider"
 
 const cairo = Cairo({
   subsets: ["latin"],
@@ -19,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={cairo.className}>{children}</body>
+      <body className={cairo.className}>
+        <AppStoreProvider>{children}</AppStoreProvider>
+      </body>
     </html>
   )
 }
