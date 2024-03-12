@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react"
 import Link from "next/link"
+import { MessageType } from "@/types"
 import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 // import { getTimeDifference } from "@/utils/getTimeDifference"
 import { motion } from "framer-motion"
@@ -15,16 +16,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 type Props = {
   imageSrc?: string
   name: string
-  lastMessage: string
-  messageTime: Date | string | number
-  newMessages: number
+  lastMessage: MessageType
+  newMessages?: MessageType[]
 }
 
 const ChatItem = ({
   imageSrc,
   name,
   lastMessage,
-  messageTime,
+
   newMessages,
 }: Props) => {
   const [chatOptions, setChatOptions] = useState(false)
@@ -81,16 +81,16 @@ const ChatItem = ({
                 "block max-w-40 truncate text-sm font-semibold leading-loose text-[#7B7B7B]",
                 newMessages && "font-bold text-black",
               )}>
-              {lastMessage}
+              {lastMessage.message}
             </span>
           </div>
           <div className=" mr-auto">
             <span className="block text-sm leading-loose text-[#494949] ">
-              {formatTimeTo12HourClock(messageTime)}
+              {formatTimeTo12HourClock(lastMessage.time)}
             </span>
-            {newMessages ? (
+            {newMessages?.length ? (
               <span className="mt-2 block rounded bg-green-100 p-1 text-[10px] font-bold text-green-500 ">
-                {newMessages} {newMessages === 1 ? "رسالة" : "رسائل"}
+                {newMessages.length} {newMessages.length === 1 ? "رسالة" : "رسائل"}
               </span>
             ) : null}
           </div>

@@ -1,4 +1,6 @@
 import React from "react"
+import { dummyChats } from "@/dummy-data/dummy-chats"
+import { Chat } from "@/types"
 
 import ChatItem from "./chat-item"
 
@@ -12,16 +14,23 @@ const ViewChats = (props: Props) => {
       </div>
 
       <div className="max-h-[calc(100vh-350px)] overflow-scroll">
-        {new Array(10).fill("").map((e, i) => (
-          <ChatItem
-            newMessages={i % 2 ? i : 0}
-            key={`chat_${i}`}
-            imageSrc={"https://github.com/shadcn.png"}
-            name="يزن عبدالله"
-            lastMessage="رسالة طويلة  جدا وتحتاج الى عرض جزئي فقط"
-            messageTime={new Date()}
-          />
-        ))}
+        {dummyChats
+          .sort((a, b) =>
+            a.lasMessage.time < b.lasMessage.time
+              ? 1
+              : a.lasMessage.time > b.lasMessage.time
+                ? -1
+                : 0,
+          )
+          .map((message, i) => (
+            <ChatItem
+              newMessages={message.newMessages}
+              key={`chat_${i}`}
+              imageSrc={message.image}
+              name={message.name}
+              lastMessage={message.lasMessage}
+            />
+          ))}
       </div>
     </>
   )
