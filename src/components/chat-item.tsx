@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react"
 import Link from "next/link"
 import { MessageType } from "@/types"
+import { showProperTime } from "@/utils/showProperTime"
 // import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 // import { getTimeDifference } from "@/utils/getTimeDifference"
 import { motion } from "framer-motion"
@@ -63,7 +64,7 @@ const ChatItem = ({
           dragElastic={0.3}
           dragConstraints={{ left: 0, right: 0 }}
           className={cn(
-            " relative flex  items-center gap-2 border-b border-t bg-white px-6 py-4 duration-200",
+            " relative flex   gap-2 border-b border-t bg-white px-6 py-4 duration-200",
             chatOptions && "!translate-x-[5.8rem]",
           )}>
           <Avatar className=" aspect-square h-14 w-14">
@@ -85,11 +86,11 @@ const ChatItem = ({
             </span>
           </div>
           <div className=" mr-auto">
-            <span className="block text-sm">
+            {/* <span className="block text-sm">
               {new Date(lastMessage.time).toLocaleDateString("ar")}
-            </span>
-            <span className="block text-[12px] leading-loose text-[#494949] ">
-              {new Date(lastMessage.time).toLocaleTimeString("ar")}
+            </span> */}
+            <span className="block text-sm leading-loose text-[#494949] ">
+              {showProperTime(lastMessage.time)}
             </span>
             {newMessages?.length ? (
               <span className="mt-2 block w-fit rounded bg-green-100 p-1 text-[10px] font-bold text-green-500 ">
