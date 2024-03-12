@@ -12,6 +12,8 @@ const SearchChats = (props: Props) => {
   const handleFilter = () => {
     setDrawer("filters")
   }
+
+  // TODO handle search chats
   return (
     <div className="!mt-4  flex items-center gap-4">
       <div className="relative w-full">
