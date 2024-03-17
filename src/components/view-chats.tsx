@@ -3,6 +3,7 @@ import { dummyChats } from "@/dummy-data/dummy-chats"
 import { Chat } from "@/types"
 
 import ChatItem from "./chat-item"
+import { ScrollArea } from "./ui/scroll-area"
 
 type Props = {}
 
@@ -13,7 +14,7 @@ const ViewChats = (props: Props) => {
         <h2 className="mt-8 pb-4 text-xl font-bold">جميع المحادثات</h2>
       </div>
 
-      <div className="max-h-[calc(100vh-350px)] overflow-scroll">
+      <ScrollArea className="h-[calc(100vh-350px)]">
         {dummyChats
           .sort((a, b) =>
             a.lasMessage.time < b.lasMessage.time
@@ -31,7 +32,7 @@ const ViewChats = (props: Props) => {
               lastMessage={message.lasMessage}
             />
           ))}
-      </div>
+      </ScrollArea>
     </>
   )
 }

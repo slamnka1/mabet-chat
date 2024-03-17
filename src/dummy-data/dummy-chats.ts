@@ -82,7 +82,7 @@ export const dummyChats: Chat[] = [
     lasMessage: {
       id: 7892,
       message: "رسالة طويلة  جدا وتحتاج الى عرض جزئي فقط",
-      time: new Date("3/11/2024"),
+      time: new Date("3/16/2024"),
     },
   },
   {

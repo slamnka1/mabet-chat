@@ -49,7 +49,7 @@ const ChatItem = ({
     setChatOptions(false)
   }
   return (
-    <div className="relative" ref={ref}>
+    <div dir="rtl" className="relative" ref={ref}>
       <Link href={"/chats/1"}>
         <button
           onClick={handleDeleteChat}
