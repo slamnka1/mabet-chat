@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 
+import ActionButton from "@/components/ui/action-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import ChatBody from "@/components/chat-body"
 
@@ -25,12 +26,7 @@ export default function page() {
               <p className="text-sm font-semibold">غير متصل الان</p>
             </div>
           </div>
-          <button
-            className="transparent flex aspect-square w-8 items-center justify-center rounded-lg"
-            type="button"
-            title="settings">
-            <MoreHorizontal color="#fff" />
-          </button>
+          <ActionButton action="chat-options" />
         </div>
       </div>
       <ChatBody />
