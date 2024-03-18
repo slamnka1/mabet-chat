@@ -4,6 +4,7 @@ import { ChevronRight, MoreHorizontal } from "lucide-react"
 import ActionButton from "@/components/ui/action-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import ChatBody from "@/components/chat-body"
+import ChatInput from "@/components/chat-input"
 
 export default function page() {
   return (
@@ -30,6 +31,7 @@ export default function page() {
         </div>
       </div>
       <ChatBody />
+      <ChatInput />
     </main>
   )
 }

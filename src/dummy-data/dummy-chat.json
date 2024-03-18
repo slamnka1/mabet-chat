@@ -14,56 +14,6 @@
     },
     "messages": [
       {
-        "id": 3,
-        "chat_id": "2",
-        "message": "aaaaaaaaaaaaaa5555555",
-        "user_id": 18,
-        "user_guard": "sanctum",
-        "is_me": false,
-        "sent_at": "23:12",
-        "date": "10/01/2024"
-      },
-      {
-        "id": 4,
-        "chat_id": "2",
-        "message": "secret",
-        "user_id": 18,
-        "user_guard": "sanctum",
-        "is_me": false,
-        "sent_at": "23:12",
-        "date": "10/01/2024"
-      },
-      {
-        "id": 5,
-        "chat_id": "2",
-        "message": "hello",
-        "user_id": 3,
-        "user_guard": "sanctum",
-        "is_me": false,
-        "sent_at": "23:12",
-        "date": "10/01/2024"
-      },
-      {
-        "id": 6,
-        "chat_id": "2",
-        "message": "hello",
-        "user_id": 3,
-        "user_guard": "partner_api",
-        "is_me": false,
-        "sent_at": "23:12",
-        "date": "10/01/2024"
-      },
-      {
-        "id": 7,
-        "chat_id": "2",
-        "message": "hello",
-        "user_id": 3,
-        "user_guard": "partner_api",
-        "is_me": false,
-        "sent_at": "23:12",
-        "date": "10/01/2024"
-      },
-      {
         "id": 8,
         "chat_id": "2",
         "message": "hello",
