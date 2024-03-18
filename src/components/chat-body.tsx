@@ -21,7 +21,7 @@ const ChatBody = (props: Props) => {
     }
   }, [])
   return (
-    <ScrollArea className="relative h-[calc(100vh-240px)] pt-5">
+    <ScrollArea className="relative h-[calc(100vh-250px)] pt-5">
       {chatData.data.messages.map((message, index) => {
         return (
           <React.Fragment key={`message_${message.id}`}>

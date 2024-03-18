@@ -39,7 +39,7 @@ const ChatInput = (props: Props) => {
     }
   }
   return (
-    <div className="!mt-4  flex items-center gap-4 px-4">
+    <div className="!my-4  flex items-center gap-4 px-4">
       <div className="relative w-full">
         <Textarea
           rows={rows}
