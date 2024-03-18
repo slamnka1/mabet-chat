@@ -11,10 +11,10 @@ const ViewChats = (props: Props) => {
   return (
     <>
       <div className="border-b px-6 shadow-md ">
-        <h2 className="mt-8 pb-4 text-xl font-bold">جميع المحادثات</h2>
+        <h2 className=" pb-4 text-xl font-bold">جميع المحادثات</h2>
       </div>
 
-      <ScrollArea className="h-[calc(100vh-350px)]">
+      <ScrollArea className="h-[calc(100vh-420px)]">
         {dummyChats
           .sort((a, b) =>
             a.lasMessage.time < b.lasMessage.time

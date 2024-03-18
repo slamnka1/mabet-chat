@@ -94,7 +94,8 @@ const ChatItem = ({
             </span>
             {newMessages?.length ? (
               <span className="mt-2 block w-fit rounded bg-green-100 p-1 text-[10px] font-bold text-green-500 ">
-                {newMessages.length} {newMessages.length === 1 ? "رسالة" : "رسائل"}
+                {newMessages.length}{" "}
+                {newMessages.length === 1 ? "رسالة جديدة" : "رسائل جديدة"}
               </span>
             ) : null}
           </div>

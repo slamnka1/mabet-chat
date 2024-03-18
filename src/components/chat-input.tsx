@@ -42,6 +42,7 @@ const ChatInput = (props: Props) => {
     <div className="!my-4  flex items-center gap-4 px-4">
       <div className="relative w-full">
         <Textarea
+          ref={textAreRef}
           rows={rows}
           placeholder="اكتب ما تريد الاستفسار عنه ....."
           value={inputMessage}
