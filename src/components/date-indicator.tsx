@@ -7,8 +7,8 @@ type Props = {
 
 const DateIndicator = ({ date }: Props) => {
   return (
-    <div className="flex justify-center">
-      <div className=" rounded-3xl border border-[#EEEEEE] px-7 py-1 font-semibold text-secondaryColor ">
+    <div className="sticky top-0 flex justify-center ">
+      <div className=" w-36 rounded-3xl border border-[#EEEEEE] bg-white py-1 text-center font-semibold text-secondaryColor ">
         {formatDateToArabic(date)}
       </div>
     </div>

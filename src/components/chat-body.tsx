@@ -21,24 +21,25 @@ const ChatBody = (props: Props) => {
     }
   }, [])
   return (
-    <ScrollArea className="h-[calc(100vh-164px)] py-5">
+    <ScrollArea className="relative h-[calc(100vh-164px)] py-5">
       {chatData.data.messages.map((message, index) => {
         return (
-          <div
-            key={`message_${message.id}`}
-            ref={
-              index === chatData.data.messages.length - 1 ? lastMessageRef : null
-            }>
+          <React.Fragment key={`message_${message.id}`}>
             {message.date !== chatData.data.messages[index - 1]?.date ? (
               <DateIndicator date={message.date} />
             ) : null}
-            <Message
-              {...message}
-              user_guard={message.user_guard as UserGuard}
-              name={chatData.data.user.name}
-              avatar={chatData.data.user.avatar}
-            />
-          </div>
+            <div
+              ref={
+                index === chatData.data.messages.length - 1 ? lastMessageRef : null
+              }>
+              <Message
+                {...message}
+                user_guard={message.user_guard as UserGuard}
+                name={chatData.data.user.name}
+                avatar={chatData.data.user.avatar}
+              />
+            </div>
+          </React.Fragment>
         )
       })}
     </ScrollArea>
