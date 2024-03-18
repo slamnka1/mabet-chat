@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import ChatBody from "@/components/chat-body"
 
 export default function page() {
   return (
@@ -32,6 +33,7 @@ export default function page() {
           </button>
         </div>
       </div>
+      <ChatBody />
     </main>
   )
 }
