@@ -48,7 +48,7 @@ const Message = ({
               <div
                 className={cn(
                   "flex  items-center gap-2 text-sm",
-                  is_me ? " text-primary" : "text-secondaryColor",
+                  !is_me ? " text-primary" : "text-secondaryColor",
                 )}>
                 <Avatar className=" h-8 w-8 border-[3px] border-white">
                   <AvatarImage src={avatar} />
@@ -56,7 +56,12 @@ const Message = ({
                     <User />
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-bold">{name}</span>
+                <span className="font-bold">
+                  {name}{" "}
+                  {is_me ? (
+                    <span className="text-[10px] font-normal">(أنت)</span>
+                  ) : null}
+                </span>
                 <span className="text-[11px]">{sent_at}</span>
               </div>
               <div>
