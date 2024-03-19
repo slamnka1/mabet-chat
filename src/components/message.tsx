@@ -24,6 +24,9 @@ const Message = ({
   sent_at,
   date,
 }: Props & Omit<UserType, "id">) => {
+  const handleReportMessage = async () => {
+    // TODO handle report message
+  }
   return (
     <>
       <div dir="rtl" className={cn("my-2 flex select-none  px-5 ")}>
@@ -51,7 +54,7 @@ const Message = ({
           </ContextMenuTrigger>
           {/* <ContextMenuTrigger>Right click</ContextMenuTrigger> */}
           <ContextMenuContent>
-            <ContextMenuItem>
+            <ContextMenuItem onClick={handleReportMessage}>
               <ShieldAlert className="mr-2 h-4 w-4" />
               <span>ابلاغ</span>
             </ContextMenuItem>
