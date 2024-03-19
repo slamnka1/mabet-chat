@@ -4,12 +4,4 @@ type MessageType = {
   time: Date | string
 }
 
-type Chat = {
-  id: number | string
-  name: string
-  image: string
-  lasMessage: MessageType
-  newMessages?: MessageType[]
-}
-
-export type { MessageType, Chat }
+export type { MessageType }

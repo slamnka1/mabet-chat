@@ -1,10 +1,21 @@
+import { notFound } from "next/navigation"
+import { getChatList } from "@/api/helpers/get-chat-list"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import SearchChats from "@/components/search-chats"
 import ViewChats from "@/components/view-chats"
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: {
+    [key: string]: string | undefined
+  }
+}) {
+  if (!searchParams.token) return notFound()
+  const data = await getChatList(searchParams.token)
+  console.log("🚀 ~ data:", data.data)
   return (
     <main>
       <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-16 text-white">
@@ -68,7 +79,7 @@ export default function Home() {
           <span className="text-primary">130 زائر</span>
         </div>
       </div>
-      <ViewChats />
+      <ViewChats initialChats={data.data.chats} />
     </main>
   )
 }

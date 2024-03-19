@@ -1,13 +1,18 @@
+"use client"
+
 import React from "react"
 import { dummyChats } from "@/dummy-data/dummy-chats"
-import { Chat } from "@/types"
+
+import { Chat } from "@/types/chat-list-response"
 
 import ChatItem from "./chat-item"
 import { ScrollArea } from "./ui/scroll-area"
 
-type Props = {}
+type Props = {
+  initialChats: Chat[]
+}
 
-const ViewChats = (props: Props) => {
+const ViewChats = ({ initialChats }: Props) => {
   return (
     <>
       <div className="border-b px-6 shadow-md ">
@@ -15,23 +20,9 @@ const ViewChats = (props: Props) => {
       </div>
 
       <ScrollArea className="h-[calc(100vh-420px)]">
-        {dummyChats
-          .sort((a, b) =>
-            a.lasMessage.time < b.lasMessage.time
-              ? 1
-              : a.lasMessage.time > b.lasMessage.time
-                ? -1
-                : 0,
-          )
-          .map((message, i) => (
-            <ChatItem
-              newMessages={message.newMessages}
-              key={`chat_${i}`}
-              imageSrc={message.image}
-              name={message.name}
-              lastMessage={message.lasMessage}
-            />
-          ))}
+        {initialChats.map((chat, i) => (
+          <ChatItem key={`chat_${chat.uuid}`} {...chat} />
+        ))}
       </ScrollArea>
     </>
   )

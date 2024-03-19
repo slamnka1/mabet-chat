@@ -2,32 +2,30 @@
 
 import React, { useRef, useState } from "react"
 import Link from "next/link"
-import { MessageType } from "@/types"
-import { showProperTime } from "@/utils/showProperTime"
 // import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 // import { getTimeDifference } from "@/utils/getTimeDifference"
 import { motion } from "framer-motion"
 import { Trash2, User } from "lucide-react"
 
+import { Chat } from "@/types/chat-list-response"
 import { cn } from "@/lib/utils"
 import useClickOutside from "@/hooks/use-click-outside"
 
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
-type Props = {
-  imageSrc?: string
-  name: string
-  lastMessage: MessageType
-  newMessages?: MessageType[]
-}
-
 const ChatItem = ({
-  imageSrc,
-  name,
-  lastMessage,
-
-  newMessages,
-}: Props) => {
+  uuid,
+  chat_name,
+  last_message,
+  is_read,
+  unread_messages,
+  chat_image,
+  created_at,
+  last_message_at,
+  last_message_day,
+  chat_link,
+  access_token,
+}: Chat) => {
   const [chatOptions, setChatOptions] = useState(false)
   const hasBeenMovedEnough = (value: number) => {
     if (value >= 120) {
@@ -68,21 +66,21 @@ const ChatItem = ({
             chatOptions && "!translate-x-[5.8rem]",
           )}>
           <Avatar className=" aspect-square h-14 w-14">
-            <AvatarImage src={imageSrc} />
+            <AvatarImage src={chat_image} />
             <AvatarFallback>
               <User />
             </AvatarFallback>
           </Avatar>
           <div>
             <p className="text-[14px] font-bold leading-loose text-secondaryColor">
-              {name}
+              {chat_name}
             </p>
             <span
               className={cn(
                 "block max-w-40 truncate text-sm font-semibold leading-loose text-[#7B7B7B]",
-                newMessages && "font-bold text-black",
+                !is_read && "font-bold text-black",
               )}>
-              {lastMessage.message}
+              {last_message}
             </span>
           </div>
           <div className=" mr-auto">
@@ -90,12 +88,12 @@ const ChatItem = ({
               {new Date(lastMessage.time).toLocaleDateString("ar")}
             </span> */}
             <span className="block text-sm leading-loose text-[#494949] ">
-              {showProperTime(lastMessage.time)}
+              {last_message_day}
             </span>
-            {newMessages?.length ? (
+            {!!unread_messages ? (
               <span className="mt-2 block w-fit rounded bg-green-100 p-1 text-[10px] font-bold text-green-500 ">
-                {newMessages.length}{" "}
-                {newMessages.length === 1 ? "رسالة جديدة" : "رسائل جديدة"}
+                {unread_messages}{" "}
+                {unread_messages === 1 ? "رسالة جديدة" : "رسائل جديدة"}
               </span>
             ) : null}
           </div>
