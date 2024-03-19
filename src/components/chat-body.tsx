@@ -56,7 +56,7 @@ const ChatBody = (props: Props) => {
           </div>
         </div>
       </div>
-      {chatData.data.messages.map((message, index) => {
+      {/* {chatData.data.messages.map((message, index) => {
         return (
           <React.Fragment key={`message_${message.id}`}>
             {message.date !== chatData.data.messages[index - 1]?.date ? (
@@ -75,7 +75,7 @@ const ChatBody = (props: Props) => {
             </div>
           </React.Fragment>
         )
-      })}
+      })} */}
     </ScrollArea>
   )
 }

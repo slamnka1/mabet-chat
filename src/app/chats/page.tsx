@@ -80,7 +80,7 @@ export default async function Home({
           <span className="text-primary">130 زائر</span>
         </div>
       </div>
-      <ViewChats initialChats={data.data.chats} />
+      <ViewChats initialChats={data.data.chats} token={searchParams.token} />
     </main>
   )
 }

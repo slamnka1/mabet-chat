@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react"
 import Link from "next/link"
+import { useParams } from "next/navigation"
 // import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 // import { getTimeDifference } from "@/utils/getTimeDifference"
 import { motion } from "framer-motion"
@@ -14,6 +15,7 @@ import useClickOutside from "@/hooks/use-click-outside"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 const ChatItem = ({
+  token,
   uuid,
   chat_name,
   last_message,
@@ -25,7 +27,7 @@ const ChatItem = ({
   last_message_day,
   chat_link,
   access_token,
-}: Chat) => {
+}: Chat & { token: string }) => {
   const [chatOptions, setChatOptions] = useState(false)
   const hasBeenMovedEnough = (value: number) => {
     if (value >= 120) {
@@ -46,9 +48,10 @@ const ChatItem = ({
     console.log("chat should be deleted")
     setChatOptions(false)
   }
+
   return (
     <div dir="rtl" className="relative" ref={ref}>
-      <Link href={"/chats/1"}>
+      <Link href={`/chats/${uuid}?token=${token}`}>
         <button
           onClick={handleDeleteChat}
           type="button"

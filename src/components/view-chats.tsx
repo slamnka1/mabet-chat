@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-import { dummyChats } from "@/dummy-data/dummy-chats"
 
 import { Chat } from "@/types/chat-list-response"
 
@@ -10,9 +9,10 @@ import { ScrollArea } from "./ui/scroll-area"
 
 type Props = {
   initialChats: Chat[]
+  token: string
 }
 
-const ViewChats = ({ initialChats }: Props) => {
+const ViewChats = ({ initialChats, token }: Props) => {
   return (
     <>
       <div className="border-b px-6 shadow-md ">
@@ -21,7 +21,7 @@ const ViewChats = ({ initialChats }: Props) => {
 
       <ScrollArea className="h-[calc(100vh-420px)]">
         {initialChats.map((chat, i) => (
-          <ChatItem key={`chat_${chat.uuid}`} {...chat} />
+          <ChatItem key={`chat_${chat.uuid}`} {...chat} token={token} />
         ))}
       </ScrollArea>
     </>
