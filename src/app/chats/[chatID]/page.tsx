@@ -7,6 +7,9 @@ import ChatBody from "@/components/chat-body"
 import ChatInput from "@/components/chat-input"
 
 export default function page() {
+  const makeMessagesRead = async () => {
+    // TODO make all messages read
+  }
   return (
     <main>
       <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-20 text-white">
