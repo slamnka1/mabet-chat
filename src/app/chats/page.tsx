@@ -15,7 +15,6 @@ export default async function Home({
 }) {
   if (!searchParams.token) return notFound()
   const data = await getChatList(searchParams.token)
-  console.log("🚀 ~ data:", data.data)
   return (
     <main>
       <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-16 text-white">
@@ -51,11 +50,13 @@ export default async function Home({
       <div className="flex items-center justify-center gap-4 p-4">
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">معدل الرد</p>
-          <span className="text-primary">100%</span>
+          <span className="text-primary">{data.data?.statics?.response_rate}</span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">وقت الرد</p>
-          <span className="text-primary">ساعتين</span>
+          <span className="text-primary">
+            {data.data?.statics?.response_duration}
+          </span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">التقييم</p>
