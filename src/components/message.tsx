@@ -1,5 +1,5 @@
 import React from "react"
-import { ShieldAlert, User } from "lucide-react"
+import { Copy, ShieldAlert, User } from "lucide-react"
 
 import { Message as Props } from "@/types/chat-response"
 import { UserType } from "@/types/user"
@@ -8,6 +8,7 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 
@@ -26,6 +27,17 @@ const Message = ({
 }: Props & Omit<UserType, "id">) => {
   const handleReportMessage = async () => {
     // TODO handle report message
+  }
+
+  const handleCopy = async () => {
+    navigator.clipboard
+      .writeText(message)
+      .then(() => {
+        console.log("Text copied successfully!")
+      })
+      .catch((error) => {
+        console.error("Failed to copy text:", error)
+      })
   }
   return (
     <>
@@ -54,8 +66,15 @@ const Message = ({
           </ContextMenuTrigger>
           {/* <ContextMenuTrigger>Right click</ContextMenuTrigger> */}
           <ContextMenuContent>
-            <ContextMenuItem onClick={handleReportMessage}>
-              <ShieldAlert className="mr-2 h-4 w-4" />
+            <ContextMenuItem onClick={handleCopy}>
+              <Copy className="mr-2 h-4 w-4 " />
+              <span>نسخ</span>
+            </ContextMenuItem>
+            <ContextMenuSeparator />
+            <ContextMenuItem
+              onClick={handleReportMessage}
+              className="text-red-500 hover:!text-red-600">
+              <ShieldAlert className="mr-2 h-4 w-4 " />
               <span>ابلاغ</span>
             </ContextMenuItem>
           </ContextMenuContent>
