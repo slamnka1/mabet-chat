@@ -22,7 +22,7 @@ const ChatBody = (props: Props) => {
   }, [])
   return (
     <ScrollArea className="relative h-[calc(100vh-250px)] pt-5">
-      <div className="my-4 px-4 ">
+      <div className="mx-auto my-4  max-w-md px-4">
         <div className="flex items-start gap-3 rounded-lg border px-3 py-2 shadow-md">
           <p className="text-right text-sm font-semibold text-[#878787] ">
             رقم التواصل مع المضيف سيظهر مباشرة بعد الحجز!. لا تحرج المضيف وتطلب منه
