@@ -5,6 +5,7 @@ import { useParams } from "next/navigation"
 import { sendMessage } from "@/api/helpers/send-message"
 import { formatDate } from "@/utils/formateDate"
 import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
+import axios from "axios"
 
 import { Action } from "./chat-body"
 import { Button } from "./ui/button"
@@ -51,12 +52,11 @@ const ChatInput = ({ dispatch }: Props) => {
 
       const searchParams = new URLSearchParams(window.location.search)
       const token = searchParams.get("token")
-      const response = await sendMessage({
+      await axios.post("/api/messages/send", {
         chatID: chatID as string,
         token,
         message: inputMessage,
       })
-      console.log(messageID)
       dispatch({
         type: "messageSent",
         payload: {
