@@ -51,17 +51,12 @@ const Message = ({
                   !is_me ? " text-primary" : "text-secondaryColor",
                 )}>
                 <Avatar className=" h-8 w-8 border-[3px] border-white">
-                  <AvatarImage src={avatar} />
+                  <AvatarImage src={is_me ? "" : avatar} />
                   <AvatarFallback>
-                    <User />
+                    <User className=" h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-bold">
-                  {name}{" "}
-                  {is_me ? (
-                    <span className="text-[10px] font-normal">(أنت)</span>
-                  ) : null}
-                </span>
+                <span className="font-bold">{is_me ? "أنت" : name}</span>
                 <span className="text-[11px]">{sent_at}</span>
               </div>
               <div>
