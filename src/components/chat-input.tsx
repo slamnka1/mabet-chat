@@ -1,13 +1,20 @@
 "use client"
 
 import React, { useRef, useState } from "react"
+import { useParams } from "next/navigation"
+import { sendMessage } from "@/api/helpers/send-message"
+import { formatDate } from "@/utils/formateDate"
+import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 
+import { Action } from "./chat-body"
 import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
 
-type Props = {}
+type Props = {
+  dispatch: React.Dispatch<Action>
+}
 
-const ChatInput = (props: Props) => {
+const ChatInput = ({ dispatch }: Props) => {
   const textAreRef = useRef<HTMLTextAreaElement>(null)
 
   // dynamic resizing text area
@@ -23,9 +30,48 @@ const ChatInput = (props: Props) => {
     setInputMessage(e.target.value)
   }
 
+  const { chatID } = useParams()
   const handleSendMessage = async () => {
     // TODO handle send message
-    setInputMessage("")
+    const messageID = Math.random() + Math.random()
+    try {
+      dispatch({
+        type: "sendingMessage",
+        payload: {
+          id: messageID,
+          chat_id: chatID as string,
+          message: inputMessage,
+          is_me: true,
+          sent_at: formatTimeTo12HourClock(new Date()),
+          date: formatDate(new Date()),
+          isLoading: true,
+        },
+      })
+      setInputMessage("")
+
+      const searchParams = new URLSearchParams(window.location.search)
+      const token = searchParams.get("token")
+      const response = await sendMessage({
+        chatID: chatID as string,
+        token,
+        message: inputMessage,
+      })
+      console.log(messageID)
+      dispatch({
+        type: "messageSent",
+        payload: {
+          messageID: messageID,
+        },
+      })
+    } catch (error) {
+      console.log("🚀 ~ handleSendMessage ~ error:", error)
+      dispatch({
+        type: "messageError",
+        payload: {
+          messageID: messageID,
+        },
+      })
+    }
   }
 
   // handling sending message using enter key
@@ -64,7 +110,10 @@ const ChatInput = (props: Props) => {
           />
         </svg>
       </div>
-      <Button type="submit" className=" shrink-0 font-bold ">
+      <Button
+        onClick={handleSendMessage}
+        type="submit"
+        className=" shrink-0 font-bold ">
         احجز الان
       </Button>
     </div>

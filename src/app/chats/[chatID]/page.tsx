@@ -43,7 +43,6 @@ export default async function Page({
         </div>
       </div>
       <ChatBody chatData={chatData} />
-      <ChatInput />
     </main>
   )
 }

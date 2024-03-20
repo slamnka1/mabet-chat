@@ -1,5 +1,5 @@
 import React from "react"
-import { Copy, ShieldAlert, User } from "lucide-react"
+import { Copy, Loader2, ShieldAlert, User } from "lucide-react"
 
 import { Message as Props } from "@/types/chat-response"
 import { UserType } from "@/types/user"
@@ -17,13 +17,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 const Message = ({
   avatar,
   name,
-  chat_id,
-  id: message_id,
   message,
-  user_guard,
   is_me,
   sent_at,
-  date,
+  isLoading,
 }: Props & Omit<UserType, "id">) => {
   const handleReportMessage = async () => {
     // TODO handle report message
@@ -59,8 +56,9 @@ const Message = ({
                 <span className="font-bold">{is_me ? "أنت" : name}</span>
                 <span className="text-[11px]">{sent_at}</span>
               </div>
-              <div>
-                <p className="mt-2 text-[#7B7B7B]">{message}</p>
+              <div className="mt-2 flex items-center gap-1">
+                {isLoading ? <Loader2 className="h-4 w-4  animate-spin" /> : null}
+                <p className=" text-[#7B7B7B]">{message}</p>
               </div>
             </div>
           </ContextMenuTrigger>

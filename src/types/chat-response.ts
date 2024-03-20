@@ -14,11 +14,13 @@ export type Message = {
   id: number
   chat_id: string
   message: string
-  user_id: number
-  user_guard: UserGuard
+  user_id?: number
+  user_guard?: UserGuard
   is_me: boolean
   sent_at: string
   date: string
+  isLoading?: boolean
+  isError?: boolean
 }
 
 export type UserGuard = "sanctum" | "partner_api" | "guest"
