@@ -8,6 +8,7 @@ import GoBackButton from "@/components/ui/go-back-button"
 import ChatBody from "@/components/chat-body"
 import ChatInput from "@/components/chat-input"
 
+export const dynamic = "force-dynamic"
 export default async function Page({
   params: { chatID },
   searchParams,

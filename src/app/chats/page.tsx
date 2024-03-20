@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import SearchChats from "@/components/search-chats"
 import ViewChats from "@/components/view-chats"
 
+export const dynamic = "force-dynamic"
 export default async function Home({
   searchParams,
 }: {

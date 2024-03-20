@@ -21,6 +21,7 @@ const Message = ({
   is_me,
   sent_at,
   isLoading,
+  isError,
 }: Props & Omit<UserType, "id">) => {
   const handleReportMessage = async () => {
     // TODO handle report message
@@ -41,7 +42,11 @@ const Message = ({
       <div dir="rtl" className={cn("my-2 flex select-none  px-5 ")}>
         <ContextMenu>
           <ContextMenuTrigger>
-            <div className="rounded-md border border-lightGray px-[10px] py-[6px]">
+            <div
+              className={cn(
+                "rounded-md border border-lightGray px-[10px] py-[6px]",
+                isError && "border-red-600 ",
+              )}>
               <div
                 className={cn(
                   "flex  items-center gap-2 text-sm",
@@ -58,6 +63,23 @@ const Message = ({
               </div>
               <div className="mt-2 flex items-center gap-1">
                 {isLoading ? <Loader2 className="h-4 w-4  animate-spin" /> : null}
+                {isError ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#db3939"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-triangle-alert">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                  </svg>
+                ) : null}
                 <p className=" text-[#7B7B7B]">{message}</p>
               </div>
             </div>
