@@ -11,6 +11,7 @@ import {
 import DateIndicator from "./date-indicator"
 import Message from "./message"
 import { ScrollArea } from "./ui/scroll-area"
+import UnitCard from "./unit-card"
 
 type Props = {
   chatData: chatResponse
@@ -27,12 +28,8 @@ const ChatBody = ({ chatData }: Props) => {
   }, [])
   return (
     <ScrollArea className="relative h-[calc(100vh-250px)] pt-5">
-      <div className="mx-auto my-4  max-w-md px-4">
+      <div dir="rtl" className="mx-auto my-4  max-w-md px-4">
         <div className="flex items-start gap-3 rounded-lg border px-3 py-2 shadow-md">
-          <p className="text-right text-sm font-semibold text-[#878787] ">
-            رقم التواصل مع المضيف سيظهر مباشرة بعد الحجز!. لا تحرج المضيف وتطلب منه
-            التواصل خارج المنصة” حيث أن ذلك سيتسبب بإيقاف حسابه ويلغي ضمان حقك.
-          </p>
           <div className=" aspect-square  rounded-lg border p-[6px] ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -59,8 +56,14 @@ const ChatBody = ({ chatData }: Props) => {
               </defs>
             </svg>
           </div>
+          <p className="text-right text-sm font-semibold text-[#878787] ">
+            رقم التواصل مع المضيف سيظهر مباشرة بعد الحجز!. لا تحرج المضيف وتطلب منه
+            التواصل خارج المنصة” حيث أن ذلك سيتسبب بإيقاف حسابه ويلغي ضمان حقك.
+          </p>
         </div>
       </div>
+      <UnitCard unit={chatData.data.unit} />
+
       {chatData.data.messages.map((message, index) => {
         return (
           <React.Fragment key={`message_${message.id}`}>
