@@ -6,7 +6,6 @@ import ActionButton from "@/components/ui/action-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import GoBackButton from "@/components/ui/go-back-button"
 import ChatBody from "@/components/chat-body"
-import ChatInput from "@/components/chat-input"
 
 export const dynamic = "force-dynamic"
 export default async function Page({
@@ -19,10 +18,6 @@ export default async function Page({
   if (!searchParams.token) return notFound()
   const { token } = searchParams
   const chatData = await getChat({ chatID, token })
-
-  const makeMessagesRead = async () => {
-    // TODO make all messages read
-  }
   return (
     <main>
       <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-20 text-white">

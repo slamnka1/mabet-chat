@@ -3,6 +3,7 @@ import { Cairo } from "next/font/google"
 
 import "./globals.css"
 
+import { SocketProvider } from "@/socket-context"
 import { AppStoreProvider } from "@/stores/app-store-provider"
 
 import { MyDrawer } from "@/components/my-drawer"
@@ -26,7 +27,7 @@ export default function RootLayout({
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
         <AppStoreProvider>
-          {children}
+          <SocketProvider>{children}</SocketProvider>
           <MyDrawer />
         </AppStoreProvider>
       </body>

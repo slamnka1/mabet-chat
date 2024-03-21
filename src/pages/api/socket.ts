@@ -1,0 +1,54 @@
+// pages/api/socket.ts
+
+import type { Server as HTTPServer } from "http"
+import type { Socket as NetSocket } from "net"
+import type { NextApiRequest, NextApiResponse } from "next"
+import type { Server as IOServer } from "socket.io"
+import { Server } from "socket.io"
+
+import { type Message } from "@/types/chat-response"
+
+interface SocketServer extends HTTPServer {
+  io?: IOServer | undefined
+}
+
+interface SocketWithIO extends NetSocket {
+  server: SocketServer
+}
+
+interface NextApiResponseWithSocket extends NextApiResponse {
+  socket: SocketWithIO
+}
+export default function SocketHandler(
+  _req: NextApiRequest,
+  res: NextApiResponseWithSocket,
+) {
+  if (res.socket.server.io) {
+    res.status(200).json({ message: "Socket is already running" })
+    return
+  }
+
+  const io = new Server(res.socket.server)
+
+  io.on("connection", (socket) => {
+    console.log("User connected", socket.id)
+
+    socket.on("sendMessage", (message: Message, chatID) => {
+      socket.to(chatID).emit("receiveMessage", { ...message, is_me: false })
+      socket.to(`chatLists-${chatID}`).emit("updateChat", chatID)
+    })
+
+    socket.on("joinChat", (chatID) => {
+      socket.join(chatID)
+      console.log(`User ID: ${socket.id} joined chat ${chatID}`)
+    })
+
+    socket.on("disconnect", () => {
+      console.log("User Disconnected", socket.id)
+    })
+  })
+
+  res.socket.server.io = io
+  res.end()
+  //   res.status(201).json({ success: true, message: "Socket is started", socket: `:${PORT + 1}` })
+}

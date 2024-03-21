@@ -1,6 +1,9 @@
 "use client"
 
 import React, { useEffect, useReducer, useRef } from "react"
+import { useParams } from "next/navigation"
+import { useSocket } from "@/socket-context"
+import { io } from "socket.io-client"
 
 import {
   chatResponse,
@@ -20,11 +23,14 @@ type Props = {
 
 export type Action =
   | { type: "sendingMessage"; payload: MessageType }
+  | { type: "receiveMessage"; payload: MessageType }
   | { type: "messageSent"; payload: { messageID: number } }
   | { type: "messageError"; payload: { messageID: number } }
 
 function reducer(state: MessageType[], action: Action) {
   switch (action.type) {
+    case "receiveMessage":
+      return [...state, action.payload]
     case "sendingMessage":
       return [...state, { ...action.payload, isLoading: true }]
     case "messageSent":
@@ -44,6 +50,7 @@ function reducer(state: MessageType[], action: Action) {
       return state
   }
 }
+
 const ChatBody = ({ chatData }: Props) => {
   const [state, dispatch] = useReducer(reducer, chatData.data.messages)
   const lastMessageRef = useRef<HTMLDivElement>(null)
@@ -53,6 +60,19 @@ const ChatBody = ({ chatData }: Props) => {
       lastMessageRef.current.scrollIntoView()
     }
   }, [state.length])
+
+  const { chatID } = useParams<{ chatID: string }>()!
+  const socket = useSocket()
+  useEffect(() => {
+    console.log("🚀 ~ ChatInput ~ socket:", socket)
+
+    if (socket?.id) {
+      socket.emit("joinChat", chatID)
+      socket.on("receiveMessage", (message: MessageType) => {
+        dispatch({ type: "receiveMessage", payload: message })
+      })
+    }
+  }, [socket?.id])
 
   return (
     <>

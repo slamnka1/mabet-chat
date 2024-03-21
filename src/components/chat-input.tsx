@@ -2,10 +2,12 @@
 
 import React, { useRef, useState } from "react"
 import { useParams } from "next/navigation"
-import { sendMessage } from "@/api/helpers/send-message"
+import { useSocket } from "@/socket-context"
 import { formatDate } from "@/utils/formateDate"
 import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 import axios from "axios"
+
+import { UserGuard, type Message } from "@/types/chat-response"
 
 import { Action } from "./chat-body"
 import { Button } from "./ui/button"
@@ -17,6 +19,7 @@ type Props = {
 
 const ChatInput = ({ dispatch }: Props) => {
   const textAreRef = useRef<HTMLTextAreaElement>(null)
+  const socket = useSocket()
 
   // dynamic resizing text area
   const textRowCount = textAreRef.current
@@ -31,32 +34,46 @@ const ChatInput = ({ dispatch }: Props) => {
     setInputMessage(e.target.value)
   }
 
-  const { chatID } = useParams()
+  const { chatID } = useParams<{ chatID: string }>()!
   const handleSendMessage = async () => {
     // TODO handle send message
     const messageID = Math.random() + Math.random()
     try {
+      const newMessage = {
+        id: messageID,
+        chat_id: chatID as string,
+        message: inputMessage,
+        is_me: true,
+        sent_at: formatTimeTo12HourClock(new Date()),
+        date: formatDate(new Date()),
+        isLoading: true,
+      }
       dispatch({
         type: "sendingMessage",
-        payload: {
-          id: messageID,
-          chat_id: chatID as string,
-          message: inputMessage,
-          is_me: true,
-          sent_at: formatTimeTo12HourClock(new Date()),
-          date: formatDate(new Date()),
-          isLoading: true,
-        },
+        payload: newMessage,
       })
       setInputMessage("")
 
       const searchParams = new URLSearchParams(window.location.search)
       const token = searchParams.get("token")
-      await axios.post("/api/messages/send", {
+      const response = await axios.post<{
+        data: {
+          chat_id: number
+          guard: UserGuard
+          id: number
+          message: string
+        }
+      }>("/api/messages/send", {
         chatID: chatID as string,
         token,
         message: inputMessage,
       })
+      console.log("🚀 ~ handleSendMessage ~ response:", response)
+      socket?.emit(
+        "sendMessage",
+        { ...newMessage, ...response.data.data, isLoading: false, isError: false },
+        chatID,
+      )
       dispatch({
         type: "messageSent",
         payload: {
