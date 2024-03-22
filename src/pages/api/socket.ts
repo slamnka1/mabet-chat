@@ -42,6 +42,10 @@ export default function SocketHandler(
       socket.join(chatID)
       console.log(`User ID: ${socket.id} joined chat ${chatID}`)
     })
+    socket.on("leaveChat", (chatID) => {
+      socket.leave(chatID)
+      console.log(`User ID: ${socket.id} leaved chat ${chatID}`)
+    })
 
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id)

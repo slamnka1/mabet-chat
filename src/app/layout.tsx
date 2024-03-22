@@ -5,7 +5,9 @@ import "./globals.css"
 
 import { SocketProvider } from "@/socket-context"
 import { AppStoreProvider } from "@/stores/app-store-provider"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
+import Providers from "@/lib/react-query/providers"
 import { MyDrawer } from "@/components/my-drawer"
 
 const cairo = Cairo({
@@ -26,10 +28,13 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
-        <AppStoreProvider>
-          <SocketProvider>{children}</SocketProvider>
-          <MyDrawer />
-        </AppStoreProvider>
+        <Providers>
+          <AppStoreProvider>
+            <SocketProvider>{children}</SocketProvider>
+            <MyDrawer />
+          </AppStoreProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Providers>
       </body>
     </html>
   )

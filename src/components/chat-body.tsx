@@ -2,8 +2,9 @@
 
 import React, { useEffect, useReducer, useRef } from "react"
 import { useParams } from "next/navigation"
+import { getChat } from "@/api/helpers/get-chat"
 import { useSocket } from "@/socket-context"
-import { io } from "socket.io-client"
+import { useQuery } from "@tanstack/react-query"
 
 import {
   chatResponse,
@@ -18,7 +19,8 @@ import { ScrollArea } from "./ui/scroll-area"
 import UnitCard from "./unit-card"
 
 type Props = {
-  chatData: chatResponse
+  chatID: string
+  token: string
 }
 
 export type Action =
@@ -51,8 +53,14 @@ function reducer(state: MessageType[], action: Action) {
   }
 }
 
-const ChatBody = ({ chatData }: Props) => {
-  const [state, dispatch] = useReducer(reducer, chatData.data.messages)
+const ChatBody = ({ chatID, token }: Props) => {
+  const { data, isFetching } = useQuery<chatResponse>({
+    queryKey: [chatID],
+    queryFn: async () => await getChat({ chatID, token }),
+    refetchOnMount: "always",
+  })
+  console.log("🚀 ~ ChatBody ~ isFetching:", isFetching)
+  const [state, dispatch] = useReducer(reducer, data!.data.messages)
   const lastMessageRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     // Scroll to the last message on mount
@@ -61,16 +69,19 @@ const ChatBody = ({ chatData }: Props) => {
     }
   }, [state.length])
 
-  const { chatID } = useParams<{ chatID: string }>()!
   const socket = useSocket()
   useEffect(() => {
-    console.log("🚀 ~ ChatInput ~ socket:", socket)
-
     if (socket?.id) {
-      socket.emit("joinChat", chatID)
-      socket.on("receiveMessage", (message: MessageType) => {
+      const receiveMessagesListener = (message: MessageType) => {
+        console.log("🚀 ~ socket.on ~ message:", message)
         dispatch({ type: "receiveMessage", payload: message })
-      })
+      }
+      socket.emit("joinChat", chatID)
+      socket.on("receiveMessage", receiveMessagesListener)
+      return () => {
+        socket.off("receiveMessage", receiveMessagesListener)
+        socket.emit("leaveChat", chatID)
+      }
     }
   }, [socket?.id])
 
@@ -111,7 +122,7 @@ const ChatBody = ({ chatData }: Props) => {
             </p>
           </div>
         </div>
-        <UnitCard unit={chatData.data.unit} />
+        <UnitCard unit={data!.data.unit} />
 
         {state.map((message, index) => {
           return (
@@ -123,8 +134,8 @@ const ChatBody = ({ chatData }: Props) => {
                 <Message
                   {...message}
                   user_guard={message.user_guard as UserGuard}
-                  name={chatData.data.user.name}
-                  avatar={chatData.data.user.avatar}
+                  name={data!.data.user.name}
+                  avatar={data!.data.user.avatar}
                 />
               </div>
             </React.Fragment>

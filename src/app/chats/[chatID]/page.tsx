@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { getChat } from "@/api/helpers/get-chat"
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 import { User } from "lucide-react"
 
 import ActionButton from "@/components/ui/action-button"
@@ -18,6 +19,12 @@ export default async function Page({
   if (!searchParams.token) return notFound()
   const { token } = searchParams
   const chatData = await getChat({ chatID, token })
+  const queryClient = new QueryClient()
+
+  await queryClient.prefetchQuery({
+    queryKey: [chatID],
+    queryFn: async () => await getChat({ chatID, token }),
+  })
   return (
     <main>
       <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-20 text-white">
@@ -38,7 +45,9 @@ export default async function Page({
           <ActionButton action="chat-options" />
         </div>
       </div>
-      <ChatBody chatData={chatData} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ChatBody chatID={chatID} token={token} />
+      </HydrationBoundary>
     </main>
   )
 }

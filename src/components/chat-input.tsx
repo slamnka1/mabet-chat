@@ -68,7 +68,6 @@ const ChatInput = ({ dispatch }: Props) => {
         token,
         message: inputMessage,
       })
-      console.log("🚀 ~ handleSendMessage ~ response:", response)
       socket?.emit(
         "sendMessage",
         { ...newMessage, ...response.data.data, isLoading: false, isError: false },

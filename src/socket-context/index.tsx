@@ -4,7 +4,6 @@ import {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
   type ReactNode,
 } from "react"
@@ -27,8 +26,6 @@ export const SocketProvider = ({ children }: SocketProvider) => {
       await fetch("/api/socket", { signal })
       const socket = io()
       socket.on("connect", () => {
-        console.log(socket.id)
-
         console.log("connected")
         // @ts-ignore
         setSocket(socket)

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { getChatList } from "@/api/helpers/get-chat-list"
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -7,6 +8,7 @@ import SearchChats from "@/components/search-chats"
 import ViewChats from "@/components/view-chats"
 
 export const dynamic = "force-dynamic"
+
 export default async function Home({
   searchParams,
 }: {
@@ -15,6 +17,12 @@ export default async function Home({
   }
 }) {
   if (!searchParams.token) return notFound()
+  const queryClient = new QueryClient()
+
+  await queryClient.prefetchQuery({
+    queryKey: ["chat-lists"],
+    queryFn: async () => await getChatList(searchParams.token!),
+  })
   const data = await getChatList(searchParams.token)
   return (
     <main>
@@ -81,7 +89,9 @@ export default async function Home({
           <span className="text-primary">130 زائر</span>
         </div>
       </div>
-      <ViewChats initialChats={data.data.chats} token={searchParams.token} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ViewChats token={searchParams.token} />
+      </HydrationBoundary>
     </main>
   )
 }
