@@ -46,7 +46,9 @@ export default function SocketHandler(
       socket.leave(chatID)
       console.log(`User ID: ${socket.id} leaved chat ${chatID}`)
     })
-
+    socket.on("typing", (isTyping, chatID) => {
+      socket.to(chatID).emit("typing", isTyping, chatID)
+    })
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id)
     })

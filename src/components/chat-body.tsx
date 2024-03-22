@@ -58,8 +58,9 @@ const ChatBody = ({ chatID, token }: Props) => {
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
     refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   })
-  console.log("🚀 ~ ChatBody ~ isFetching:", isFetching)
   const [state, dispatch] = useReducer(reducer, data!.data.messages)
   const lastMessageRef = useRef<HTMLDivElement>(null)
   useEffect(() => {

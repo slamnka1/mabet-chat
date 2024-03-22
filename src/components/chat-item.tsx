@@ -1,10 +1,9 @@
 "use client"
 
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-// import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
-// import { getTimeDifference } from "@/utils/getTimeDifference"
+import { useSocket } from "@/socket-context"
 import { motion } from "framer-motion"
 import { Trash2, User } from "lucide-react"
 
@@ -49,6 +48,23 @@ const ChatItem = ({
     setChatOptions(false)
   }
 
+  const [isTyping, setIsTyping] = useState(false)
+
+  const socket = useSocket()
+  const handleTypingState = (isTyping: boolean, chatID: string) => {
+    setIsTyping(isTyping && chatID === uuid)
+  }
+  useEffect(() => {
+    if (socket?.id) {
+      socket.emit("joinChat", uuid)
+      socket.on("typing", handleTypingState)
+      return () => {
+        socket.emit("leaveChat", uuid)
+        socket.off("typing", handleTypingState)
+      }
+    }
+  }, [socket, uuid])
+
   return (
     <div dir="rtl" className="relative" ref={ref}>
       <Link href={`/chats/${uuid}?token=${token}`}>
@@ -83,7 +99,11 @@ const ChatItem = ({
                 "block max-w-40 truncate text-sm font-semibold leading-loose text-[#7B7B7B]",
                 !is_read && "font-bold text-black",
               )}>
-              {last_message}
+              {isTyping ? (
+                <span className="font-bold text-primary">يكتب...</span>
+              ) : (
+                last_message
+              )}
             </span>
           </div>
           <div className=" mr-auto">

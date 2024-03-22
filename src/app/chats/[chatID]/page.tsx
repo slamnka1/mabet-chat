@@ -7,6 +7,7 @@ import ActionButton from "@/components/ui/action-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import GoBackButton from "@/components/ui/go-back-button"
 import ChatBody from "@/components/chat-body"
+import UserState from "@/components/user-satate"
 
 export const dynamic = "force-dynamic"
 export default async function Page({
@@ -39,7 +40,7 @@ export default async function Page({
             </Avatar>
             <div>
               <p className="mb-2 font-bold">{chatData.data.user.name}</p>
-              <p className="text-sm font-semibold">غير متصل الان</p>
+              <UserState />
             </div>
           </div>
           <ActionButton action="chat-options" />

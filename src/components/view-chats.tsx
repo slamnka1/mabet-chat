@@ -1,7 +1,8 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { getChatList } from "@/api/helpers/get-chat-list"
+import { useSocket } from "@/socket-context"
 import { useQuery } from "@tanstack/react-query"
 
 import { Chat, ChatListsResponse } from "@/types/chat-list-response"
@@ -17,7 +18,17 @@ const ViewChats = ({ token }: Props) => {
   const { data } = useQuery<ChatListsResponse>({
     queryKey: ["chat-lists"],
     queryFn: async () => await getChatList(token!),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
   })
+  const socket = useSocket()
+  useEffect(() => {
+    if (socket?.id) {
+      socket.emit("online", token)
+    }
+  }, [socket?.id])
+
   return (
     <>
       <div className="border-b px-6 shadow-md ">

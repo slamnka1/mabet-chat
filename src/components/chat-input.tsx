@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useParams } from "next/navigation"
 import { useSocket } from "@/socket-context"
 import { formatDate } from "@/utils/formateDate"
@@ -100,6 +100,31 @@ const ChatInput = ({ dispatch }: Props) => {
       handleSendMessage()
     }
   }
+
+  const handleTypingStat = useCallback(
+    (e: Event) => {
+      if (e.type === "focus") {
+        console.log("user is typing")
+        socket?.emit("typing", true, chatID)
+      } else if (e.type === "blur") {
+        console.log("user is NOT typing")
+        socket?.emit("typing", false, chatID)
+      }
+    },
+    [chatID, socket],
+  )
+
+  useEffect(() => {
+    if (textAreRef.current) {
+      const textarea = textAreRef.current
+      textarea.addEventListener("focus", handleTypingStat)
+      textarea.addEventListener("blur", handleTypingStat)
+      return () => {
+        textarea.removeEventListener("focus", handleTypingStat)
+        textarea.removeEventListener("blur", handleTypingStat)
+      }
+    }
+  }, [handleTypingStat])
   return (
     <div className="!my-4  flex items-center gap-4 px-4">
       <div className="relative w-full">
