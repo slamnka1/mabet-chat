@@ -1,4 +1,4 @@
-import ChatApi from "@/api"
+import axios from "axios"
 
 import { chatResponse } from "@/types/chat-response"
 
@@ -9,10 +9,8 @@ export const getChat = async ({
   chatID: string
   token: string
 }) => {
-  const response = await ChatApi.get<chatResponse>(`/chats/${chatID}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  const response = await axios.get<chatResponse>(
+    `http://127.0.0.1:3000/api/chats/${chatID}?token=${token}`,
+  )
   return response.data
 }

@@ -59,7 +59,7 @@ export default async function Home({
       <div className="flex items-center justify-center gap-4 p-4">
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">معدل الرد</p>
-          <span className="text-primary">{data.data?.statics?.response_rate}</span>
+          <span className="text-primary">{data?.data?.statics?.response_rate}</span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">وقت الرد</p>
