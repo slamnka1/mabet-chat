@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { getChatList } from "@/api/helpers/get-chat-list"
+import { getMe } from "@/api/helpers/get-me"
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 
@@ -25,24 +26,28 @@ export default async function Home({
       await getChatList(searchParams.token!, pageParam + ""),
     initialPageParam: 1,
   })
-  const data = await getChatList(searchParams.token, "1")
+
+  const me = await getMe({ token: searchParams.token! })
+
   return (
     <main>
-      <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-16 text-white">
-        <div className="flex items-center justify-between  ">
-          <button
+      <div className="space-y-4 rounded-b-2xl bg-gradient-conic p-6 pt-16 text-white">
+        <div className="flex items-center justify-center  ">
+          {/* <button
+
             type="button"
             title="go back"
             className="flex aspect-square w-8 items-center justify-center rounded-[4px] bg-white">
             <ChevronRight className="w-5 text-secondaryColor" />
-          </button>
+          </button> */}
+          <span></span>
           <h1 className="text-2xl font-bold">المحادثات</h1>
-          <button
+          {/* <button
             className="transparent flex aspect-square w-[34px] items-center justify-center rounded-lg"
             type="button"
             title="settings">
             <MoreHorizontal color="#fff" />
-          </button>
+          </button> */}
         </div>
         <div className="flex items-center gap-2">
           <Avatar className=" h-16 w-16 border-[3px] border-white">
@@ -50,9 +55,9 @@ export default async function Home({
             <AvatarFallback>US</AvatarFallback>
           </Avatar>
           <div>
-            <p className="mb-2 font-bold">مازن عبد العزيز</p>
+            <p className="mb-2 font-bold">{me.data.user.user.name}</p>
             <p className="text-sm font-semibold">
-              مرحبا مازن, نتمنى لك يوما سعيد .!
+              مرحبا {me.data.user.user.name}, نتمنى لك يوما سعيد .!
             </p>
           </div>
         </div>
@@ -61,12 +66,14 @@ export default async function Home({
       <div className="flex items-center justify-center gap-4 p-4">
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">معدل الرد</p>
-          <span className="text-primary">{data?.data?.statics?.response_rate}</span>
+          <span className="text-primary">
+            {me.data.user.user?.statics?.response_rate}
+          </span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">وقت الرد</p>
           <span className="text-primary">
-            {data.data?.statics?.response_duration}
+            {me.data.user.user?.statics?.response_duration}
           </span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
