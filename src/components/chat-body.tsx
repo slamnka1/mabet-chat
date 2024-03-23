@@ -24,6 +24,7 @@ type Props = {
 }
 
 export type Action =
+  | { type: "updateState"; payload: MessageType[] }
   | { type: "sendingMessage"; payload: MessageType }
   | { type: "receiveMessage"; payload: MessageType }
   | { type: "messageSent"; payload: { messageID: number } }
@@ -31,6 +32,8 @@ export type Action =
 
 function reducer(state: MessageType[], action: Action) {
   switch (action.type) {
+    case "updateState":
+      return [...action.payload]
     case "receiveMessage":
       return [...state, action.payload]
     case "sendingMessage":
@@ -54,7 +57,7 @@ function reducer(state: MessageType[], action: Action) {
 }
 
 const ChatBody = ({ chatID, token }: Props) => {
-  const { data, isFetching } = useQuery<chatResponse>({
+  const { data, isFetching, isFetched } = useQuery<chatResponse>({
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
     refetchOnMount: "always",
@@ -62,7 +65,13 @@ const ChatBody = ({ chatID, token }: Props) => {
     refetchOnReconnect: "always",
   })
   const [state, dispatch] = useReducer(reducer, data!.data.messages)
+  useEffect(() => {
+    if (!isFetching && data) {
+      dispatch({ type: "updateState", payload: data.data.messages })
+    }
+  }, [isFetching])
   const lastMessageRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     // Scroll to the last message on mount
     if (lastMessageRef.current) {

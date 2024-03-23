@@ -34,8 +34,7 @@ export default function SocketHandler(
     console.log("User connected", socket.id)
 
     socket.on("sendMessage", (message: Message, chatID) => {
-      socket.to(chatID).emit("receiveMessage", { ...message, is_me: false })
-      socket.to(`chatLists-${chatID}`).emit("updateChat", chatID)
+      socket.to(chatID).emit("receiveMessage", { ...message, is_me: false }, chatID)
     })
 
     socket.on("joinChat", (chatID) => {

@@ -6,8 +6,9 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
     const token = searchParams.get("token")
+    const page = searchParams.get("page")
     if (!token) return new Response("Unauthorized", { status: 401 })
-    const response = await ChatApi.get<ChatListsResponse>("/chats", {
+    const response = await ChatApi.get<ChatListsResponse>(`/chats?page=${page}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

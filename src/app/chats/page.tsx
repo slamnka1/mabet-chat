@@ -19,11 +19,13 @@ export default async function Home({
   if (!searchParams.token) return notFound()
   const queryClient = new QueryClient()
 
-  await queryClient.prefetchQuery({
+  await queryClient.prefetchInfiniteQuery({
     queryKey: ["chat-lists"],
-    queryFn: async () => await getChatList(searchParams.token!),
+    queryFn: async ({ pageParam }) =>
+      await getChatList(searchParams.token!, pageParam + ""),
+    initialPageParam: 1,
   })
-  const data = await getChatList(searchParams.token)
+  const data = await getChatList(searchParams.token, "1")
   return (
     <main>
       <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-16 text-white">
