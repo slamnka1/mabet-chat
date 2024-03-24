@@ -31,25 +31,26 @@ export default async function Page({
 
   return (
     <main>
-      <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-20 text-white">
-        <div className="flex items-center justify-between gap-4 ">
-          <GoBackButton />
-          <div className="flex grow items-center gap-2">
-            <Avatar className="h-[60px] w-[60px] border-[3px] border-white">
-              <AvatarImage src={chatData.data.user.avatar} />
-              <AvatarFallback>
-                <User />
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="mb-2 font-bold">{chatData.data.user.name}</p>
-              <UserState />
-            </div>
-          </div>
-          <ActionButton action="chat-options" />
-        </div>
-      </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
+        <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-20 text-white">
+          <div className="flex items-center justify-between gap-4 ">
+            <GoBackButton />
+            <div className="flex grow items-center gap-2">
+              <Avatar className="h-[60px] w-[60px] border-[3px] border-white">
+                <AvatarImage src={chatData.data.user.avatar} />
+                <AvatarFallback>
+                  <User />
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="mb-2 font-bold">{chatData.data.user.name}</p>
+                <UserState chatID={chatID} token={token} />
+              </div>
+            </div>
+            {/* <ActionButton action="chat-options" /> */}
+            <span></span>
+          </div>
+        </div>
         <ChatBody
           userIdentifier={me.data.user.user.user_identifier}
           chatID={chatID}

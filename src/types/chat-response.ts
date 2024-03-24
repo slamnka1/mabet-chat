@@ -39,4 +39,5 @@ export type User = {
   avatar: string
   created_at: string
   user_identifier: string
+  is_online: boolean
 }

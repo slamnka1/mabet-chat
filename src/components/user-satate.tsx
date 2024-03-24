@@ -1,14 +1,26 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
+import { getChat } from "@/api/helpers/get-chat"
 import { useSocket } from "@/socket-context"
+import { useQuery } from "@tanstack/react-query"
 
-type Props = {}
+import { chatResponse } from "@/types/chat-response"
 
-const UserState = (props: Props) => {
+type Props = {
+  chatID: string
+  token: string
+}
+
+const UserState = ({ chatID, token }: Props) => {
+  const { data, isFetching, isFetched } = useQuery<chatResponse>({
+    queryKey: [chatID],
+    queryFn: async () => await getChat({ chatID, token }),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: "always",
+    refetchOnReconnect: "always",
+  })
   const [isTyping, setIsTyping] = useState(false)
-  const { chatID } = useParams<{ chatID: string }>()!
 
   const socket = useSocket()
   const handleTypingState = (isTyping: boolean, chat_id: string) => {
@@ -26,6 +38,8 @@ const UserState = (props: Props) => {
     <p className="text-sm font-semibold">
       {isTyping ? (
         <span className="font-bold text-white">يكتب...</span>
+      ) : data?.data.user.is_online ? (
+        "متصل الأن"
       ) : (
         " غير متصل الان"
       )}
