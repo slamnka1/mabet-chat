@@ -26,6 +26,7 @@ const ChatItem = ({
   last_message_day,
   chat_link,
   access_token,
+  is_user_online,
 }: Chat & { token: string }) => {
   const [chatOptions, setChatOptions] = useState(false)
   const hasBeenMovedEnough = (value: number) => {
@@ -84,12 +85,17 @@ const ChatItem = ({
             " relative flex   gap-2 border-b border-t bg-white px-6 py-4 duration-200",
             chatOptions && "!translate-x-[5.8rem]",
           )}>
-          <Avatar className=" aspect-square h-14 w-14">
-            <AvatarImage src={chat_image} />
-            <AvatarFallback>
-              <User />
-            </AvatarFallback>
-          </Avatar>
+          <div className="relative">
+            <Avatar className=" relative aspect-square h-14 w-14">
+              <AvatarImage src={chat_image} />
+              <AvatarFallback>
+                <User />
+              </AvatarFallback>
+            </Avatar>
+            {is_user_online ? (
+              <span className="absolute bottom-0 left-1 block h-4 w-4  rounded-full bg-green-500"></span>
+            ) : null}
+          </div>
           <div>
             <p className="text-[14px] font-bold leading-loose text-secondaryColor">
               {chat_name}

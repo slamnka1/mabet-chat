@@ -29,6 +29,8 @@ export type Chat = {
   last_message_day: string
   chat_link: string
   access_token: string
+  is_user_online: null | boolean
+  user_identifier: string
 }
 
 export type Statics = {
