@@ -13,6 +13,7 @@ import {
   Message as MessageType,
   UserGuard,
 } from "@/types/chat-response"
+import { cn } from "@/lib/utils"
 
 import ChatInput from "./chat-input"
 import DateIndicator from "./date-indicator"
@@ -23,6 +24,7 @@ import UnitCard from "./unit-card"
 type Props = {
   chatID: string
   token: string
+  className?: string
 }
 
 export type Action =
@@ -61,7 +63,7 @@ function reducer(state: MessageType[], action: Action) {
   }
 }
 
-const ChatBody = ({ chatID, token }: Props) => {
+const ChatBody = ({ chatID, token, className }: Props) => {
   const { data, isFetching, isFetched } = useQuery<chatResponse>({
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
@@ -121,7 +123,7 @@ const ChatBody = ({ chatID, token }: Props) => {
 
   return (
     <>
-      <ScrollArea className="relative h-[calc(100vh-250px)] pt-5">
+      <ScrollArea className={cn("relative h-[calc(100vh-250px)] pt-5", className)}>
         <div dir="rtl" className="mx-auto my-4  max-w-md px-4">
           <div className="flex items-start gap-3 rounded-lg border px-3 py-2 shadow-md">
             <div className=" aspect-square  rounded-lg border p-[6px] ">

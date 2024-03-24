@@ -4,6 +4,8 @@ import React from "react"
 import { useAppStore } from "@/stores/app-store-provider"
 import { MoreHorizontal } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 type Props = {
   action: string
 }
@@ -16,10 +18,10 @@ const ActionButton = ({ action }: Props) => {
   return (
     <button
       onClick={handleAction}
-      className="transparent flex aspect-square w-8 items-center justify-center rounded-lg"
+      className=" flex aspect-square w-8 items-center justify-center rounded-lg bg-primary"
       type="button"
       title="settings">
-      <MoreHorizontal color="#fff" />
+      <MoreHorizontal className={cn("text-white")} />
     </button>
   )
 }

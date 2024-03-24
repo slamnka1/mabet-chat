@@ -155,7 +155,7 @@ const ChatInput = ({ dispatch }: Props) => {
         onClick={handleSendMessage}
         type="submit"
         className=" shrink-0 font-bold ">
-        احجز الان
+        ارسال
       </Button>
     </div>
   )

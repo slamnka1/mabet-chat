@@ -1,36 +1,26 @@
 import { notFound } from "next/navigation"
-import { getChatList } from "@/api/helpers/get-chat-list"
 import { getMe } from "@/api/helpers/get-me"
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import AdminChatView from "@/components/admin-chat-view"
 import SearchChats from "@/components/search-chats"
-import ViewChats from "@/components/view-chats"
 
 export const dynamic = "force-dynamic"
 
-export default async function Admin({
-  searchParams,
+export default async function AdminLayout({
+  children,
+  params,
 }: {
-  searchParams: {
-    [key: string]: string | undefined
+  children: React.ReactNode
+  params: {
+    token: string
   }
 }) {
-  if (!searchParams.token) return notFound()
-  const queryClient = new QueryClient()
-
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ["chat-lists"],
-    queryFn: async ({ pageParam }) =>
-      await getChatList({ token: searchParams.token!, pageParam: pageParam + "" }),
-    initialPageParam: 1,
-  })
-
-  const me = await getMe({ token: searchParams.token! })
-
+  const me = await getMe({ token: params.token.replace("%7C", "|") })
   return (
     <main>
-      <div className="space-y-4 rounded-b-2xl bg-gradient-conic p-6 pt-16 text-white">
+      {/* <AdminMe /> */}
+      <div className="mb-5 space-y-4 rounded-b-2xl bg-gradient-conic p-6 pt-16 text-white">
         <div className="flex items-center justify-center  ">
           {/* <button
 
@@ -60,11 +50,16 @@ export default async function Admin({
             </p>
           </div>
         </div>
-        <SearchChats />
       </div>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <ViewChats token={searchParams.token} />
-      </HydrationBoundary>
+      <div className="flex gap-8">
+        <div className="w-[40%]">
+          <div className="mb-4">
+            <SearchChats />
+          </div>
+          <AdminChatView token={params.token} />
+        </div>
+        <div className="w-full">{children}</div>
+      </div>
     </main>
   )
 }

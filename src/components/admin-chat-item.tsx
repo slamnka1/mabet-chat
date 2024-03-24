@@ -10,26 +10,35 @@ import { motion } from "framer-motion"
 import { Trash2, User } from "lucide-react"
 import { toast } from "sonner"
 
-import { Chat } from "@/types/chat-list-response"
+import { Chat } from "@/types/admin-chats-list-reponse"
 import { cn } from "@/lib/utils"
 import useClickOutside from "@/hooks/use-click-outside"
 
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
-const ChatItem = ({
+const AdminChatItem = ({
   token,
   uuid,
-  chat_name,
+  sender_name,
+  receiver_name,
+  is_sender_online,
+  last_sender_active,
+  is_receiver_online,
+  last_receiver_active,
+  sender_identifier,
+  receiver_identifier,
+  sender_guard,
+  receiver_guard,
+  sender_image,
+  receiver_image,
   last_message,
   is_read,
   unread_messages,
-  chat_image,
   created_at,
   last_message_at,
   last_message_day,
   chat_link,
   access_token,
-  is_user_online,
 }: Chat & { token: string }) => {
   const pathName = usePathname()
   const isAdminView = pathName?.includes("admin")
@@ -106,21 +115,25 @@ const ChatItem = ({
             " relative flex   gap-2 border-b border-t bg-white px-6 py-4 duration-200",
             chatOptions && "!translate-x-[5.8rem]",
           )}>
-          <div className="relative">
-            <Avatar className=" relative aspect-square h-14 w-14">
-              <AvatarImage src={chat_image} />
-              <AvatarFallback>
-                <User />
-              </AvatarFallback>
-            </Avatar>
-            {is_user_online ? (
-              <span className="absolute bottom-0 left-1 block h-4 w-4  rounded-full bg-green-500"></span>
-            ) : null}
+          <div className="flex gap-2">
+            <div className="relative">
+              <Avatar className=" relative aspect-square h-14 w-14">
+                <AvatarImage src={receiver_image} />
+                <AvatarFallback>
+                  <User />
+                </AvatarFallback>
+              </Avatar>
+              {is_receiver_online ? (
+                <span className="absolute bottom-0 left-1 block h-4 w-4  rounded-full bg-green-500"></span>
+              ) : null}
+            </div>
           </div>
+
           <div>
-            <p className="text-[14px] font-bold leading-loose text-secondaryColor">
-              {chat_name}
-            </p>
+            <div className="  mb-2 flex gap-1 text-sm">
+              <span>{sender_name?.trim() || "ضيف"}</span>&
+              <span>{receiver_name?.trim()}</span>
+            </div>
             <span
               className={cn(
                 "block max-w-40 truncate text-sm font-semibold leading-loose text-[#7B7B7B]",
@@ -153,4 +166,4 @@ const ChatItem = ({
   )
 }
 
-export default ChatItem
+export default AdminChatItem
