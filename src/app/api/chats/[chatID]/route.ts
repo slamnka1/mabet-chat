@@ -7,7 +7,6 @@ export async function GET(req: Request, { params }: { params: { chatID: string }
     const { searchParams } = new URL(req.url)
     const token = searchParams.get("token")
     const { chatID } = params
-    console.log("🚀 ~ GET ~ chatID:", chatID)
     if (!token) return new Response("Unauthorized", { status: 401 })
 
     const response = await ChatApi.get<chatResponse>(`/chats/${chatID}`, {

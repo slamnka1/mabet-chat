@@ -1,5 +1,7 @@
 import React from "react"
+import axios from "axios"
 import { Copy, Loader2, ShieldAlert, User } from "lucide-react"
+import { toast } from "sonner"
 
 import { Message as Props } from "@/types/chat-response"
 import { UserType } from "@/types/user"
@@ -22,9 +24,27 @@ const Message = ({
   sent_at,
   isLoading,
   isError,
-}: Props & Omit<UserType, "id">) => {
+  id,
+  chat_id,
+  chatID,
+  token,
+  deleteMessage,
+}: Props &
+  Omit<UserType, "id"> & {
+    token: string
+    chatID: string
+    deleteMessage: (messageID: number) => Promise<void>
+  }) => {
   const handleReportMessage = async () => {
-    // TODO handle report message
+    try {
+      await axios.post(`/api/chats/${chatID}/report/${id}?token=${token}`)
+      toast.success("شكرا لابلاغك, سنقوم بمراجعة الابلاغ الخاص بك في اسرع وقت ممكن")
+    } catch (error: any) {
+      if (axios.isAxiosError(error) && error.response?.status === 304) {
+        toast.error(error.response.data.errors[0])
+      }
+      toast.error("عذرا لم يتم الابلاغ على الرسالة!")
+    }
   }
 
   const handleCopy = async () => {
@@ -36,6 +56,9 @@ const Message = ({
       .catch((error) => {
         console.error("Failed to copy text:", error)
       })
+  }
+  const handleDeleteMessage = async () => {
+    await deleteMessage(id)
   }
   return (
     <>
@@ -86,17 +109,30 @@ const Message = ({
           </ContextMenuTrigger>
           {/* <ContextMenuTrigger>Right click</ContextMenuTrigger> */}
           <ContextMenuContent>
-            <ContextMenuItem onClick={handleCopy}>
-              <Copy className="mr-2 h-4 w-4 " />
-              <span>نسخ</span>
-            </ContextMenuItem>
-            <ContextMenuSeparator />
             <ContextMenuItem
-              onClick={handleReportMessage}
-              className="text-red-500 hover:!text-red-600">
-              <ShieldAlert className="mr-2 h-4 w-4 " />
-              <span>ابلاغ</span>
+              onClick={handleCopy}
+              className="flex-end  justify-end gap-1">
+              <span>نسخ</span>
+              <Copy className="mr-2 h-4 w-4 " />
             </ContextMenuItem>
+            {!is_me ? (
+              <>
+                <ContextMenuSeparator />
+                <ContextMenuItem
+                  onClick={handleReportMessage}
+                  className="flex-end justify-end gap-1  text-red-500 hover:!text-red-600">
+                  <span>ابلاغ</span>
+                  <ShieldAlert className="mr-2 h-4 w-4 " />
+                </ContextMenuItem>
+              </>
+            ) : (
+              <ContextMenuItem
+                onClick={handleDeleteMessage}
+                className="flex-end justify-end gap-1  text-red-500 hover:!text-red-600">
+                <span>حذف الرسالة</span>
+                <ShieldAlert className="mr-2 h-4 w-4 " />
+              </ContextMenuItem>
+            )}
           </ContextMenuContent>
         </ContextMenu>
       </div>

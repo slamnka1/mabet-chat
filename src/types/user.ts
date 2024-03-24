@@ -17,6 +17,7 @@ export type DataUser = {
   access_token: string
   user: UserUser
   token_type: string
+  statics: Statics
   expires_in: null
 }
 
@@ -27,4 +28,13 @@ export type UserUser = {
   phonenumber: string
   user_guard: string
   user_identifier: string
+  avatar: string
+}
+
+export type Statics = {
+  response_rate: string
+  rating: number
+  out_of: number
+  chat_count: number
+  response_duration: string
 }

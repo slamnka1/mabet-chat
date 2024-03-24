@@ -51,7 +51,7 @@ export default async function Home({
         </div>
         <div className="flex items-center gap-2">
           <Avatar className=" h-16 w-16 border-[3px] border-white">
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={me.data.user.user.avatar} />
             <AvatarFallback>US</AvatarFallback>
           </Avatar>
           <div>
@@ -67,13 +67,13 @@ export default async function Home({
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">معدل الرد</p>
           <span className="text-primary">
-            {me.data.user.user?.statics?.response_rate}
+            {me.data.user?.statics?.response_rate}
           </span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">وقت الرد</p>
           <span className="text-primary">
-            {me.data.user.user?.statics?.response_duration}
+            {me.data.user?.statics?.response_duration}
           </span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
@@ -90,12 +90,12 @@ export default async function Home({
                 fill="#4EBEB2"
               />
             </svg>
-            5{" "}
+            {me.data.user.statics?.rating}/{me.data.user.statics?.out_of}
           </span>
         </div>
         <div className=" flex flex-col justify-between gap-3 rounded-lg border px-[10px] py-[6px] text-center font-bold">
           <p className="text-[10px]">التعاملات</p>
-          <span className="text-primary">130 زائر</span>
+          <span className="text-primary">{me.data.user.statics?.chat_count}</span>
         </div>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>

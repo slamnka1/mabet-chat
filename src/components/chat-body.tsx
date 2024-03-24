@@ -1,10 +1,12 @@
 "use client"
 
-import React, { useEffect, useReducer, useRef } from "react"
+import React, { useEffect, useReducer, useRef, useState } from "react"
 import { useParams } from "next/navigation"
 import { getChat } from "@/api/helpers/get-chat"
 import { useSocket } from "@/socket-context"
 import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
+import { toast } from "sonner"
 
 import {
   chatResponse,
@@ -29,6 +31,7 @@ export type Action =
   | { type: "receiveMessage"; payload: MessageType }
   | { type: "messageSent"; payload: { messageID: number } }
   | { type: "messageError"; payload: { messageID: number } }
+  | { type: "deleteMessage"; payload: { messageID: number } }
 
 function reducer(state: MessageType[], action: Action) {
   switch (action.type) {
@@ -50,6 +53,8 @@ function reducer(state: MessageType[], action: Action) {
           ? { ...message, isLoading: false, isError: true }
           : message,
       )
+    case "deleteMessage":
+      return state.filter((message) => action.payload.messageID !== message.id)
 
     default:
       return state
@@ -72,11 +77,13 @@ const ChatBody = ({ chatID, token }: Props) => {
   }, [isFetching])
   const lastMessageRef = useRef<HTMLDivElement>(null)
 
+  const [numberOfMessages, setNumberOfMessages] = useState(state.length || 0)
   useEffect(() => {
     // Scroll to the last message on mount
-    if (lastMessageRef.current) {
+    if (lastMessageRef.current && numberOfMessages < state.length) {
       lastMessageRef.current.scrollIntoView()
     }
+    setNumberOfMessages(state.length)
   }, [state.length])
 
   const socket = useSocket()
@@ -95,6 +102,17 @@ const ChatBody = ({ chatID, token }: Props) => {
     }
   }, [socket?.id])
 
+  const deleteMessage = async (messageID: number) => {
+    try {
+      await axios.post(`/api/messages/delete/${messageID}?token=${token}`)
+      dispatch({ type: "deleteMessage", payload: { messageID } })
+    } catch (error: any) {
+      if (axios.isAxiosError(error) && error.response?.data) {
+        toast.error(error.response.data.message)
+      }
+      toast.error("عذرا لم يتم حذف الرسالة!")
+    }
+  }
   return (
     <>
       <ScrollArea className="relative h-[calc(100vh-250px)] pt-5">
@@ -142,6 +160,9 @@ const ChatBody = ({ chatID, token }: Props) => {
               ) : null}
               <div ref={index === state.length - 1 ? lastMessageRef : null}>
                 <Message
+                  deleteMessage={deleteMessage}
+                  token={token}
+                  chatID={chatID}
                   {...message}
                   user_guard={message.user_guard as UserGuard}
                   name={data!.data.user.name}

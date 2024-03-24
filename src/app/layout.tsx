@@ -6,6 +6,7 @@ import "./globals.css"
 import { SocketProvider } from "@/socket-context"
 import { AppStoreProvider } from "@/stores/app-store-provider"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { Toaster } from "sonner"
 
 import Providers from "@/lib/react-query/providers"
 import { MyDrawer } from "@/components/my-drawer"
@@ -31,6 +32,7 @@ export default function RootLayout({
         <Providers>
           <AppStoreProvider>
             <SocketProvider>{children}</SocketProvider>
+            <Toaster />
             <MyDrawer />
           </AppStoreProvider>
           <ReactQueryDevtools initialIsOpen={false} />
