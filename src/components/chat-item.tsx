@@ -4,8 +4,11 @@ import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useSocket } from "@/socket-context"
+import { useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
 import { motion } from "framer-motion"
 import { Trash2, User } from "lucide-react"
+import { toast } from "sonner"
 
 import { Chat } from "@/types/chat-list-response"
 import { cn } from "@/lib/utils"
@@ -40,12 +43,27 @@ const ChatItem = ({
     setChatOptions(false)
   })
 
-  const handleDeleteChat: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  // Get QueryClient from the context
+  const queryClient = useQueryClient()
+
+  const handleDeleteChat: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.stopPropagation()
     e.preventDefault()
+    try {
+      const deleteChat = axios.post(`/api/chats/${uuid}?token=${token}`)
 
-    // TODO handle delete chat
-    console.log("chat should be deleted")
+      toast.promise(deleteChat, {
+        loading: "جاري حذف المحادثة",
+        success: (data) => {
+          return "تم حذف المحادثة"
+        },
+        error: "لم حذف المحادثة",
+      })
+      await deleteChat
+      await queryClient.refetchQueries({ queryKey: ["chat-lists"] })
+    } catch (error) {
+      toast.error("لم حذف المحادثة")
+    }
     setChatOptions(false)
   }
 
