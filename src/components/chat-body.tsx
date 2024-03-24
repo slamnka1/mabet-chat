@@ -93,10 +93,15 @@ const ChatBody = ({ chatID, token }: Props) => {
         console.log("🚀 ~ socket.on ~ message:", message)
         dispatch({ type: "receiveMessage", payload: message })
       }
+      const deletedMessageListener = (messageID: number) => {
+        dispatch({ type: "deleteMessage", payload: { messageID } })
+      }
       socket.emit("joinChat", chatID)
       socket.on("receiveMessage", receiveMessagesListener)
+      socket.on("deletedMessage", deletedMessageListener)
       return () => {
         socket.off("receiveMessage", receiveMessagesListener)
+        socket.off("deletedMessage", deletedMessageListener)
         socket.emit("leaveChat", chatID)
       }
     }
@@ -106,6 +111,7 @@ const ChatBody = ({ chatID, token }: Props) => {
     try {
       await axios.post(`/api/messages/delete/${messageID}?token=${token}`)
       dispatch({ type: "deleteMessage", payload: { messageID } })
+      socket?.emit("deleteMessage", chatID, messageID)
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response?.data) {
         toast.error(error.response.data.message)

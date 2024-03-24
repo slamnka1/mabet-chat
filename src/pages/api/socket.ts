@@ -36,6 +36,9 @@ export default function SocketHandler(
     socket.on("sendMessage", (message: Message, chatID) => {
       socket.to(chatID).emit("receiveMessage", { ...message, is_me: false }, chatID)
     })
+    socket.on("deleteMessage", (chatID, messageID) => {
+      socket.to(chatID).emit("deletedMessage", messageID)
+    })
 
     socket.on("joinChat", (chatID) => {
       socket.join(chatID)
