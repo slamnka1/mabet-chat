@@ -15,9 +15,10 @@ import { Textarea } from "./ui/textarea"
 
 type Props = {
   dispatch: React.Dispatch<Action>
+  receiverIdentifier: string
 }
 
-const ChatInput = ({ dispatch }: Props) => {
+const ChatInput = ({ dispatch, receiverIdentifier }: Props) => {
   const textAreRef = useRef<HTMLTextAreaElement>(null)
   const socket = useSocket()
 
@@ -36,7 +37,6 @@ const ChatInput = ({ dispatch }: Props) => {
 
   const { chatID } = useParams<{ chatID: string }>()!
   const handleSendMessage = async () => {
-    // TODO handle send message
     const messageID = Math.random() + Math.random()
     try {
       const newMessage = {
@@ -72,6 +72,7 @@ const ChatInput = ({ dispatch }: Props) => {
         "sendMessage",
         { ...newMessage, ...response.data.data, isLoading: false, isError: false },
         chatID,
+        receiverIdentifier,
       )
       dispatch({
         type: "messageSent",
@@ -105,10 +106,11 @@ const ChatInput = ({ dispatch }: Props) => {
     (e: Event) => {
       if (e.type === "focus") {
         console.log("user is typing")
-        socket?.emit("typing", true, chatID)
+        socket?.emit("typing", true, chatID, receiverIdentifier)
+        console.log("🚀 ~ ChatInput ~ receiverIdentifier:", receiverIdentifier)
       } else if (e.type === "blur") {
         console.log("user is NOT typing")
-        socket?.emit("typing", false, chatID)
+        socket?.emit("typing", false, chatID, receiverIdentifier)
       }
     },
     [chatID, socket],

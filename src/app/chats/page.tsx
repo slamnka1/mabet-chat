@@ -99,7 +99,10 @@ export default async function Home({
         </div>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ViewChats token={searchParams.token} />
+        <ViewChats
+          userIdentifier={me.data.user.user.user_identifier}
+          token={searchParams.token}
+        />
       </HydrationBoundary>
     </main>
   )

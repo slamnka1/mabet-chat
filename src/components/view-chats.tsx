@@ -10,13 +10,15 @@ import { ChatListsResponse } from "@/types/chat-list-response"
 import { Message } from "@/types/chat-response"
 
 import ChatItem from "./chat-item"
+import Loader from "./ui/loader"
 import { ScrollArea } from "./ui/scroll-area"
 
 type Props = {
   token: string
+  userIdentifier: string
 }
 
-const ViewChats = ({ token }: Props) => {
+const ViewChats = ({ token, userIdentifier }: Props) => {
   const chatsQuery = useAppStore((state) => state.chatsQuery)
   const {
     data,
@@ -57,6 +59,8 @@ const ViewChats = ({ token }: Props) => {
         queryClient.invalidateQueries({ queryKey: [chatID] })
         queryClient.refetchQueries({ queryKey: ["chat-lists"] })
       }
+      socket.emit("setIdentifier", userIdentifier)
+
       socket.on("receiveMessage", receiveMessagesListener)
       return () => {
         socket.off("receiveMessage", receiveMessagesListener)
@@ -95,7 +99,7 @@ const ViewChats = ({ token }: Props) => {
         <h2 className=" pb-4 text-xl font-bold">جميع المحادثات</h2>
       </div>
       {isLoading ? (
-        <div>loading...</div>
+        <Loader className="flex justify-center py-10" />
       ) : (
         <ScrollArea className="h-[calc(100vh-420px)]">
           {data?.pages

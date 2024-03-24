@@ -38,4 +38,5 @@ export type User = {
   name: string
   avatar: string
   created_at: string
+  user_identifier: string
 }

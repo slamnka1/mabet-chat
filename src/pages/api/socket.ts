@@ -31,8 +31,10 @@ export default function SocketHandler(
   const io = new Server(res.socket.server)
 
   io.on("connection", (socket) => {
-    socket.on("sendMessage", (message: Message, chatID) => {
-      socket.to(chatID).emit("receiveMessage", { ...message, is_me: false }, chatID)
+    socket.on("sendMessage", (message: Message, chatID, receiverIdentifier) => {
+      socket
+        .to(receiverIdentifier)
+        .emit("receiveMessage", { ...message, is_me: false }, chatID)
     })
     socket.on("deleteMessage", (chatID, messageID) => {
       socket.to(chatID).emit("deletedMessage", messageID)
@@ -41,12 +43,18 @@ export default function SocketHandler(
     socket.on("joinChat", (chatID) => {
       socket.join(chatID)
     })
+    socket.on("setIdentifier", (identifier) => {
+      console.log("🚀 ~ socket.on ~ identifier:", identifier)
+      socket.join(identifier)
+    })
     socket.on("leaveChat", (chatID) => {
       socket.leave(chatID)
       console.log(`User ID: ${socket.id} leaved chat ${chatID}`)
     })
-    socket.on("typing", (isTyping, chatID) => {
-      socket.to(chatID).emit("typing", isTyping, chatID)
+    socket.on("typing", (isTyping, chatID, receiverIdentifier) => {
+      socket
+        .to(receiverIdentifier)
+        .emit("typing", isTyping, chatID, receiverIdentifier)
     })
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id)

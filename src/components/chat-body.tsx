@@ -72,6 +72,7 @@ const ChatBody = ({ chatID, token, className }: Props) => {
     refetchOnReconnect: "always",
   })
   const [state, dispatch] = useReducer(reducer, data!.data.messages)
+  console.log("🚀 ~ ChatBody ~ data:", data)
   useEffect(() => {
     if (!isFetching && data) {
       dispatch({ type: "updateState", payload: data.data.messages })
@@ -186,7 +187,10 @@ const ChatBody = ({ chatID, token, className }: Props) => {
           )
         })}
       </ScrollArea>
-      <ChatInput dispatch={dispatch} />
+      <ChatInput
+        receiverIdentifier={data?.data.user.user_identifier || ""}
+        dispatch={dispatch}
+      />
     </>
   )
 }
