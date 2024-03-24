@@ -5,7 +5,7 @@ export type chatResponse = {
 }
 
 export type Data = {
-  unit: Unit
+  unit: Record<string | string, Unit>
   user: User
   messages: Message[]
 }
@@ -19,6 +19,7 @@ export type Message = {
   is_me: boolean
   sent_at: string
   date: string
+  unit_id: number | string
   isLoading?: boolean
   isError?: boolean
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useAppStore } from "@/stores/app-store-provider"
 import { Search } from "lucide-react"
 
@@ -14,6 +14,10 @@ const SearchChats = (props: Props) => {
   const handleSearchChats = () => {
     setChatsQuery(inputValue)
   }
+
+  useEffect(() => {
+    if (inputValue === "") setChatsQuery(inputValue)
+  }, [inputValue, setChatsQuery])
 
   // TODO handle search chats
   return (

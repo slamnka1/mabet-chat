@@ -50,7 +50,7 @@ const ChatInput = ({ dispatch }: Props) => {
       }
       dispatch({
         type: "sendingMessage",
-        payload: newMessage,
+        payload: { ...newMessage, unit_id: "" },
       })
       setInputMessage("")
 

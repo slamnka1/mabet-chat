@@ -118,6 +118,7 @@ const ChatBody = ({ chatID, token }: Props) => {
       toast.error("عذرا لم يتم حذف الرسالة!")
     }
   }
+
   return (
     <>
       <ScrollArea className="relative h-[calc(100vh-250px)] pt-5">
@@ -155,11 +156,16 @@ const ChatBody = ({ chatID, token }: Props) => {
             </p>
           </div>
         </div>
-        <UnitCard unit={data!.data.unit} />
 
         {state.map((message, index) => {
           return (
             <React.Fragment key={`message_${message.id}`}>
+              {message.unit_id !== state[index - 1]?.unit_id ? (
+                data?.data.unit?.[message.unit_id] ? (
+                  <UnitCard unit={data!.data.unit?.[message.unit_id]} />
+                ) : null
+              ) : null}
+
               {message.date !== state[index - 1]?.date ? (
                 <DateIndicator date={message.date} />
               ) : null}
