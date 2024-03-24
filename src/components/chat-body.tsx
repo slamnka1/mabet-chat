@@ -73,7 +73,6 @@ const ChatBody = ({ chatID, token, className, userIdentifier }: Props) => {
     refetchOnReconnect: "always",
   })
   const [state, dispatch] = useReducer(reducer, data!.data.messages)
-  console.log("🚀 ~ ChatBody ~ data:", data)
   useEffect(() => {
     if (!isFetching && data) {
       dispatch({ type: "updateState", payload: data.data.messages })
@@ -81,13 +80,15 @@ const ChatBody = ({ chatID, token, className, userIdentifier }: Props) => {
   }, [isFetching])
   const lastMessageRef = useRef<HTMLDivElement>(null)
 
-  const [numberOfMessages, setNumberOfMessages] = useState(state.length || 0)
+  const [numberOfMessages, setNumberOfMessages] = useState(0)
   useEffect(() => {
     // Scroll to the last message on mount
-    if (lastMessageRef.current && numberOfMessages < state.length) {
-      lastMessageRef.current.scrollIntoView()
+    if (lastMessageRef.current) {
+      if (numberOfMessages < state.length || !numberOfMessages) {
+        lastMessageRef.current.scrollIntoView()
+      }
+      setNumberOfMessages(state.length)
     }
-    setNumberOfMessages(state.length)
   }, [state.length])
 
   const socket = useSocket()

@@ -47,7 +47,6 @@ const AdminChatView = ({ token }: Props) => {
         : lastPage.data.current_page + 1
     },
   })
-  console.log("🚀 ~ AdminChatView ~ data:", data)
 
   const socket = useSocket()
   // Get QueryClient from the context
