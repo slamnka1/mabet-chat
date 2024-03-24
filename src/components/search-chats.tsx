@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { useAppStore } from "@/stores/app-store-provider"
 import { Search } from "lucide-react"
 
@@ -9,9 +9,10 @@ import { Input } from "./ui/input"
 type Props = {}
 
 const SearchChats = (props: Props) => {
-  // const setDrawer = useAppStore((state) => state.setDrawer)
-  const handleFilter = () => {
-    // setDrawer("filters")
+  const setChatsQuery = useAppStore((state) => state.setChatsQuery)
+  const [inputValue, setInputValue] = useState("")
+  const handleSearchChats = () => {
+    setChatsQuery(inputValue)
   }
 
   // TODO handle search chats
@@ -19,6 +20,10 @@ const SearchChats = (props: Props) => {
     <div className="!mt-4  flex items-center gap-4">
       <div className="relative w-full">
         <Input
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value)
+          }}
           placeholder="ابحث عن محادثة ......"
           className=" border-[#D6D6D6] bg-white pr-11 placeholder:font-bold"
         />
@@ -36,7 +41,7 @@ const SearchChats = (props: Props) => {
         </svg>
       </div>
       <button
-        onClick={handleFilter}
+        onClick={handleSearchChats}
         type="button"
         title="more options"
         className="flex aspect-square h-10 w-10 shrink-0 items-center  justify-center rounded-lg bg-white ">

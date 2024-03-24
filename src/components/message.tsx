@@ -27,6 +27,7 @@ const Message = ({
   id,
   chat_id,
   chatID,
+  user_guard,
   token,
   deleteMessage,
 }: Props &
@@ -62,26 +63,37 @@ const Message = ({
   }
   return (
     <>
-      <div dir="rtl" className={cn("my-2 flex select-none  px-5 ")}>
+      <div
+        dir="rtl"
+        className={cn(
+          "my-2 flex select-none  px-5 ",
+          user_guard === "admin" && "my-4 shadow-md",
+        )}>
         <ContextMenu>
           <ContextMenuTrigger>
             <div
               className={cn(
                 "rounded-md border border-lightGray px-[10px] py-[6px]",
                 isError && "border-red-600 ",
+                user_guard === "admin" && "border-primary ",
               )}>
               <div
                 className={cn(
                   "flex  items-center gap-2 text-sm",
                   !is_me ? " text-primary" : "text-secondaryColor",
+                  user_guard === "admin" && "text-[16px] font-bold text-primary",
                 )}>
                 <Avatar className=" h-8 w-8 border-[3px] border-white">
-                  <AvatarImage src={is_me ? "" : avatar} />
+                  <AvatarImage
+                    src={user_guard === "admin" ? "" : is_me ? "" : avatar}
+                  />
                   <AvatarFallback>
                     <User className=" h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
-                <span className="font-bold">{is_me ? "أنت" : name}</span>
+                <span className="font-bold">
+                  {user_guard === "admin" ? "مسؤول" : is_me ? "أنت" : name}
+                </span>
                 <span className="text-[11px]">{sent_at}</span>
               </div>
               <div className="mt-2 flex items-center gap-1">
@@ -103,7 +115,13 @@ const Message = ({
                     <path d="M12 17h.01" />
                   </svg>
                 ) : null}
-                <p className=" text-[#7B7B7B]">{message}</p>
+                <p
+                  className={cn(
+                    " text-[#7B7B7B]",
+                    user_guard === "admin" && "font-bold  text-secondaryColor",
+                  )}>
+                  {message}
+                </p>
               </div>
             </div>
           </ContextMenuTrigger>
@@ -115,7 +133,7 @@ const Message = ({
               <span>نسخ</span>
               <Copy className="mr-2 h-4 w-4 " />
             </ContextMenuItem>
-            {!is_me ? (
+            {user_guard === "admin" ? null : !is_me ? (
               <>
                 <ContextMenuSeparator />
                 <ContextMenuItem

@@ -31,8 +31,6 @@ export default function SocketHandler(
   const io = new Server(res.socket.server)
 
   io.on("connection", (socket) => {
-    console.log("User connected", socket.id)
-
     socket.on("sendMessage", (message: Message, chatID) => {
       socket.to(chatID).emit("receiveMessage", { ...message, is_me: false }, chatID)
     })
@@ -42,7 +40,6 @@ export default function SocketHandler(
 
     socket.on("joinChat", (chatID) => {
       socket.join(chatID)
-      console.log(`User ID: ${socket.id} joined chat ${chatID}`)
     })
     socket.on("leaveChat", (chatID) => {
       socket.leave(chatID)

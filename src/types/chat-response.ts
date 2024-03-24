@@ -23,7 +23,7 @@ export type Message = {
   isError?: boolean
 }
 
-export type UserGuard = "sanctum" | "partner_api" | "guest"
+export type UserGuard = "sanctum" | "partner_api" | "guest" | "admin"
 
 export type Unit = {
   name: string

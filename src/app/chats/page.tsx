@@ -21,9 +21,9 @@ export default async function Home({
   const queryClient = new QueryClient()
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: ["chat-lists"],
+    queryKey: ["chat-lists", ""],
     queryFn: async ({ pageParam }) =>
-      await getChatList(searchParams.token!, pageParam + ""),
+      await getChatList({ token: searchParams.token!, pageParam: pageParam + "" }),
     initialPageParam: 1,
   })
 

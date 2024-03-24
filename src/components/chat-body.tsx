@@ -90,7 +90,6 @@ const ChatBody = ({ chatID, token }: Props) => {
   useEffect(() => {
     if (socket?.id) {
       const receiveMessagesListener = (message: MessageType) => {
-        console.log("🚀 ~ socket.on ~ message:", message)
         dispatch({ type: "receiveMessage", payload: message })
       }
       const deletedMessageListener = (messageID: number) => {
