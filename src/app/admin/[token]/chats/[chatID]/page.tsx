@@ -38,14 +38,19 @@ export default async function Page({
             </Avatar>
             <div>
               <p className="mb-2 font-bold">{chatData.data.user.name}</p>
-              <UserState />
+              <UserState chatID={chatID} token={token} />
             </div>
           </div>
           <ActionButton action="chat-options" />
         </div>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ChatBody className="h-[calc(100vh-415px)]" chatID={chatID} token={token} />
+        <ChatBody
+          userIdentifier="admin_api_1"
+          className="h-[calc(100vh-415px)]"
+          chatID={chatID}
+          token={token}
+        />
       </HydrationBoundary>
     </main>
   )

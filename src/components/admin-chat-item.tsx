@@ -86,10 +86,8 @@ const AdminChatItem = ({
   }
   useEffect(() => {
     if (socket?.id) {
-      socket.emit("joinChat", uuid)
       socket.on("typing", handleTypingState)
       return () => {
-        socket.emit("leaveChat", uuid)
         socket.off("typing", handleTypingState)
       }
     }

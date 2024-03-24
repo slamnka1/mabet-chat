@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { getChatList } from "@/api/helpers/get-chat-list"
 import { useSocket } from "@/socket-context"
 import { useAppStore } from "@/stores/app-store-provider"
@@ -12,14 +12,17 @@ import { Message as MessageType } from "@/types/chat-response"
 
 import AdminChatItem from "./admin-chat-item"
 import ChatItem from "./chat-item"
+import { Label } from "./ui/label"
 import Loader from "./ui/loader"
 import { ScrollArea } from "./ui/scroll-area"
+import { Switch } from "./ui/switch"
 
 type Props = {
   token: string
 }
 
 const AdminChatView = ({ token }: Props) => {
+  const [showReportedChats, setShowReportedChats] = useState(false)
   const chatsQuery = useAppStore((state) => state.chatsQuery)
   const {
     data,
@@ -29,12 +32,13 @@ const AdminChatView = ({ token }: Props) => {
     isFetchingNextPage,
     isLoading,
   } = useInfiniteQuery<AdminChatsListResponse>({
-    queryKey: ["admin-chats-list", chatsQuery],
+    queryKey: ["admin-chats-list", chatsQuery, showReportedChats],
     queryFn: async ({ pageParam }) => {
       return await getChatList({
         token: token,
         pageParam: pageParam + "",
         query: chatsQuery,
+        showReportedChats,
       })
     },
     refetchOnMount: "always",
@@ -93,15 +97,25 @@ const AdminChatView = ({ token }: Props) => {
   }, [isFetching, isFetchingNextPage, hasNextPage, fetchNextPage, isLoading])
 
   return (
-    <ScrollArea className="bg-stale-50 h-[calc(100vh-300px)]">
-      {data?.pages
-        ?.flatMap((element) => element.data.chats)
-        .map((chat, i) => (
-          <AdminChatItem key={`chat_${chat.uuid}`} {...chat} token={token} />
-        ))}
-      {isFetching ? <Loader className=" flex justify-center py-5" /> : null}
-      <div className="h-5 " ref={ref}></div>
-    </ScrollArea>
+    <>
+      <div dir="ltr" className="flex items-center gap-2 space-x-2 px-4 py-2 ">
+        <Switch
+          id="show_reported_chats"
+          checked={showReportedChats}
+          onCheckedChange={setShowReportedChats}
+        />
+        <Label htmlFor="show_reported_chats">عرض المحادثات المبلغ عليها </Label>
+      </div>
+      <ScrollArea className="bg-stale-50 h-[calc(100vh-300px)]">
+        {data?.pages
+          ?.flatMap((element) => element.data.chats)
+          .map((chat, i) => (
+            <AdminChatItem key={`chat_${chat.uuid}`} {...chat} token={token} />
+          ))}
+        {isFetching ? <Loader className=" flex justify-center py-5" /> : null}
+        <div className="h-5 " ref={ref}></div>
+      </ScrollArea>
+    </>
   )
 }
 
