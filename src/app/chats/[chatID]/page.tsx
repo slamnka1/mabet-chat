@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import { getChat } from "@/api/helpers/get-chat"
+import { getMe } from "@/api/helpers/get-me"
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 import { User } from "lucide-react"
 
@@ -26,6 +27,8 @@ export default async function Page({
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
   })
+  const me = await getMe({ token: searchParams.token! })
+
   return (
     <main>
       <div className="space-y-6 rounded-b-2xl bg-gradient-conic p-6 pt-20 text-white">
@@ -47,7 +50,11 @@ export default async function Page({
         </div>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ChatBody chatID={chatID} token={token} />
+        <ChatBody
+          userIdentifier={me.data.user.user.user_identifier}
+          chatID={chatID}
+          token={token}
+        />
       </HydrationBoundary>
     </main>
   )

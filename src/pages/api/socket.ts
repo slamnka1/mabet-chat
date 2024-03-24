@@ -36,8 +36,8 @@ export default function SocketHandler(
         .to(receiverIdentifier)
         .emit("receiveMessage", { ...message, is_me: false }, chatID)
     })
-    socket.on("deleteMessage", (chatID, messageID) => {
-      socket.to(chatID).emit("deletedMessage", messageID)
+    socket.on("deleteMessage", (chatID, messageID, receiverIdentifier) => {
+      socket.to(receiverIdentifier).emit("deletedMessage", messageID)
     })
 
     socket.on("joinChat", (chatID) => {
@@ -46,6 +46,10 @@ export default function SocketHandler(
     socket.on("setIdentifier", (identifier) => {
       console.log("🚀 ~ socket.on ~ identifier:", identifier)
       socket.join(identifier)
+    })
+    socket.on("removeIdentifier", (identifier) => {
+      console.log("🚀 ~ socket.on ~ identifier:", identifier)
+      socket.leave(identifier)
     })
     socket.on("leaveChat", (chatID) => {
       socket.leave(chatID)

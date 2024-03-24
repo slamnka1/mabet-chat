@@ -64,6 +64,7 @@ const ViewChats = ({ token, userIdentifier }: Props) => {
       socket.on("receiveMessage", receiveMessagesListener)
       return () => {
         socket.off("receiveMessage", receiveMessagesListener)
+        socket.emit("removeIdentifier", userIdentifier)
       }
     }
   }, [socket?.id])

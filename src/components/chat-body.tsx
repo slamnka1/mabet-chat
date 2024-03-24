@@ -25,6 +25,7 @@ type Props = {
   chatID: string
   token: string
   className?: string
+  userIdentifier: string
 }
 
 export type Action =
@@ -63,7 +64,7 @@ function reducer(state: MessageType[], action: Action) {
   }
 }
 
-const ChatBody = ({ chatID, token, className }: Props) => {
+const ChatBody = ({ chatID, token, className, userIdentifier }: Props) => {
   const { data, isFetching, isFetched } = useQuery<chatResponse>({
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
@@ -99,12 +100,14 @@ const ChatBody = ({ chatID, token, className }: Props) => {
         dispatch({ type: "deleteMessage", payload: { messageID } })
       }
       socket.emit("joinChat", chatID)
+      socket.emit("setIdentifier", userIdentifier)
       socket.on("receiveMessage", receiveMessagesListener)
       socket.on("deletedMessage", deletedMessageListener)
       return () => {
         socket.off("receiveMessage", receiveMessagesListener)
         socket.off("deletedMessage", deletedMessageListener)
         socket.emit("leaveChat", chatID)
+        socket.emit("removeIdentifier", userIdentifier)
       }
     }
   }, [socket?.id])
