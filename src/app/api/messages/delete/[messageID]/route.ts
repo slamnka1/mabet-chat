@@ -14,6 +14,7 @@ export async function POST(
     return Response.json(response)
   } catch (error) {
     if (axios.isAxiosError(error)) {
+      console.log("🚀 ~ error:", error)
       return new Response(JSON.stringify(error.response?.data), {
         status: error.response?.status || 500,
       })

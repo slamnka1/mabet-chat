@@ -106,7 +106,12 @@ const ViewChats = ({ token, userIdentifier }: Props) => {
           {data?.pages
             ?.flatMap((element) => element.data.chats)
             .map((chat, i) => (
-              <ChatItem key={`chat_${chat.uuid}`} {...chat} token={token} />
+              <ChatItem
+                userIdentifier={userIdentifier}
+                key={`chat_${chat.uuid}`}
+                {...chat}
+                token={token}
+              />
             ))}
 
           <div className="h-5 " ref={ref}></div>

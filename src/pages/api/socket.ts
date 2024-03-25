@@ -35,9 +35,12 @@ export default function SocketHandler(
       socket
         .to(receiverIdentifier)
         .emit("receiveMessage", { ...message, is_me: false }, chatID)
+      socket
+        .to("admin_api_1")
+        .emit("receiveMessage", { ...message, is_me: false }, chatID)
     })
-    socket.on("deleteMessage", (chatID, messageID, receiverIdentifier) => {
-      socket.to(receiverIdentifier).emit("deletedMessage", messageID)
+    socket.on("deleteMessage", (chatID, messageID) => {
+      socket.to(chatID).emit("deletedMessage", messageID)
     })
 
     socket.on("joinChat", (chatID) => {
@@ -53,12 +56,10 @@ export default function SocketHandler(
     })
     socket.on("leaveChat", (chatID) => {
       socket.leave(chatID)
-      console.log(`User ID: ${socket.id} leaved chat ${chatID}`)
     })
     socket.on("typing", (isTyping, chatID, receiverIdentifier) => {
-      socket
-        .to(receiverIdentifier)
-        .emit("typing", isTyping, chatID, receiverIdentifier)
+      socket.to(receiverIdentifier).emit("typing", isTyping, chatID)
+      socket.to("admin_api_1").emit("typing", isTyping, chatID)
     })
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id)

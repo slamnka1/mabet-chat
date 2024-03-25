@@ -4,6 +4,7 @@ import { getMe } from "@/api/helpers/get-me"
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 import { User } from "lucide-react"
 
+import { chatResponse } from "@/types/chat-response"
 import ActionButton from "@/components/ui/action-button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import GoBackButton from "@/components/ui/go-back-button"
@@ -20,7 +21,7 @@ export default async function Page({
 }) {
   if (!searchParams.token) return notFound()
   const { token } = searchParams
-  const chatData = await getChat({ chatID, token })
+  const chatData = await getChat<chatResponse>({ chatID, token })
   const queryClient = new QueryClient()
 
   await queryClient.prefetchQuery({

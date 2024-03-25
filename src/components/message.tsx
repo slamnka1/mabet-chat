@@ -1,4 +1,5 @@
 import React from "react"
+import { usePathname } from "next/navigation"
 import axios from "axios"
 import { Copy, Loader2, ShieldAlert, User } from "lucide-react"
 import { toast } from "sonner"
@@ -61,6 +62,8 @@ const Message = ({
   const handleDeleteMessage = async () => {
     await deleteMessage(id)
   }
+  const pathName = usePathname()
+  const isAdminView = pathName?.includes("/admin")
   return (
     <>
       <div
@@ -80,7 +83,7 @@ const Message = ({
               <div
                 className={cn(
                   "flex  items-center gap-2 text-sm",
-                  !is_me ? " text-primary" : "text-secondaryColor",
+                  !is_me && !isAdminView ? " text-primary" : "text-secondaryColor",
                   user_guard === "admin" && "text-[16px] font-bold text-primary",
                 )}>
                 <Avatar className=" h-8 w-8 border-[3px] border-white">

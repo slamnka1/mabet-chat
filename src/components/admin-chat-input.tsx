@@ -7,18 +7,18 @@ import { formatDate } from "@/utils/formateDate"
 import { formatTimeTo12HourClock } from "@/utils/formatTimeTo12HourClock"
 import axios from "axios"
 
-import { UserGuard, type Message } from "@/types/chat-response"
+import { UserGuard } from "@/types/chat-response"
 
-import { Action } from "./chat-body"
+import { Action } from "./admin-chat-body"
 import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
 
 type Props = {
   dispatch: React.Dispatch<Action>
-  receiverIdentifier: string
+  users: [string, string]
 }
 
-const ChatInput = ({ dispatch, receiverIdentifier }: Props) => {
+const AdminChatInput = ({ dispatch, users }: Props) => {
   const textAreRef = useRef<HTMLTextAreaElement>(null)
   const socket = useSocket()
 
@@ -72,7 +72,8 @@ const ChatInput = ({ dispatch, receiverIdentifier }: Props) => {
         "sendMessage",
         { ...newMessage, ...response.data.data, isLoading: false, isError: false },
         chatID,
-        receiverIdentifier,
+        users[0],
+        users[1],
       )
       dispatch({
         type: "messageSent",
@@ -102,29 +103,6 @@ const ChatInput = ({ dispatch, receiverIdentifier }: Props) => {
     }
   }
 
-  const handleTypingStat = useCallback(
-    (e: Event) => {
-      if (e.type === "focus") {
-        socket?.emit("typing", true, chatID, receiverIdentifier)
-        console.log("🚀 ~ ChatInput ~ receiverIdentifier:", receiverIdentifier)
-      } else if (e.type === "blur") {
-        socket?.emit("typing", false, chatID, receiverIdentifier)
-      }
-    },
-    [chatID, socket],
-  )
-
-  useEffect(() => {
-    if (textAreRef.current) {
-      const textarea = textAreRef.current
-      textarea.addEventListener("focus", handleTypingStat)
-      textarea.addEventListener("blur", handleTypingStat)
-      return () => {
-        textarea.removeEventListener("focus", handleTypingStat)
-        textarea.removeEventListener("blur", handleTypingStat)
-      }
-    }
-  }, [handleTypingStat])
   return (
     <div className="!my-4  flex items-center gap-4 px-4">
       <div className="relative w-full">
@@ -161,4 +139,4 @@ const ChatInput = ({ dispatch, receiverIdentifier }: Props) => {
   )
 }
 
-export default ChatInput
+export default AdminChatInput

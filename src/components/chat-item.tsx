@@ -30,9 +30,8 @@ const ChatItem = ({
   chat_link,
   access_token,
   is_user_online,
-}: Chat & { token: string }) => {
-  const pathName = usePathname()
-  const isAdminView = pathName?.includes("admin")
+  userIdentifier,
+}: Chat & { token: string; userIdentifier: string }) => {
   const [chatOptions, setChatOptions] = useState(false)
   const hasBeenMovedEnough = (value: number) => {
     if (value >= 120) {
@@ -86,8 +85,7 @@ const ChatItem = ({
 
   return (
     <div dir="rtl" className="relative" ref={ref}>
-      <Link
-        href={`${isAdminView ? `/admin/${token}` : ""}/chats/${uuid}?token=${token}`}>
+      <Link href={`/chats/${uuid}?token=${token}`}>
         <button
           onClick={handleDeleteChat}
           type="button"

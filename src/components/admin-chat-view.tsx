@@ -62,11 +62,21 @@ const AdminChatView = ({ token }: Props) => {
 
       const receiveMessagesListener = (message: MessageType, chatID: string) => {
         queryClient.invalidateQueries({ queryKey: [chatID] })
-        queryClient.refetchQueries({ queryKey: ["chat-lists"] })
+        queryClient.refetchQueries({
+          queryKey: ["admin-chats-list", chatsQuery, showReportedChats],
+        })
       }
       socket.on("receiveMessage", receiveMessagesListener)
       return () => {
         socket.off("receiveMessage", receiveMessagesListener)
+      }
+    }
+  }, [socket?.id])
+  useEffect(() => {
+    if (socket?.id) {
+      socket.emit("setIdentifier", "admin_api_1")
+      return () => {
+        socket.emit("removeIdentifier", "admin_api_1")
       }
     }
   }, [socket?.id])
