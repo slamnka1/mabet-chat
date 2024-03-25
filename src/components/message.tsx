@@ -136,7 +136,14 @@ const Message = ({
               <span>نسخ</span>
               <Copy className="mr-2 h-4 w-4 " />
             </ContextMenuItem>
-            {user_guard === "admin" ? null : !is_me ? (
+            {isAdminView || is_me ? (
+              <ContextMenuItem
+                onClick={handleDeleteMessage}
+                className="flex-end justify-end gap-1  text-red-500 hover:!text-red-600">
+                <span>حذف الرسالة</span>
+                <ShieldAlert className="mr-2 h-4 w-4 " />
+              </ContextMenuItem>
+            ) : (
               <>
                 <ContextMenuSeparator />
                 <ContextMenuItem
@@ -146,13 +153,6 @@ const Message = ({
                   <ShieldAlert className="mr-2 h-4 w-4 " />
                 </ContextMenuItem>
               </>
-            ) : (
-              <ContextMenuItem
-                onClick={handleDeleteMessage}
-                className="flex-end justify-end gap-1  text-red-500 hover:!text-red-600">
-                <span>حذف الرسالة</span>
-                <ShieldAlert className="mr-2 h-4 w-4 " />
-              </ContextMenuItem>
             )}
           </ContextMenuContent>
         </ContextMenu>
