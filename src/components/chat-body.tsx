@@ -72,7 +72,8 @@ const ChatBody = ({ chatID, token, className, userIdentifier }: Props) => {
     refetchOnWindowFocus: "always",
     refetchOnReconnect: "always",
   })
-  const [state, dispatch] = useReducer(reducer, data!.data.messages)
+
+  const [state, dispatch] = useReducer(reducer, data?.data.messages || [])
   useEffect(() => {
     if (!isFetching && data) {
       dispatch({ type: "updateState", payload: data.data.messages })
