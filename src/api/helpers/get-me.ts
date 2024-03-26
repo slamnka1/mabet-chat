@@ -6,5 +6,6 @@ export const getMe = async ({ token }: { token: string }) => {
   const response = await axios.get<UserResponse>(
     `http://127.0.0.1:3000/api/me?token=${token}`,
   )
+
   return response.data
 }
